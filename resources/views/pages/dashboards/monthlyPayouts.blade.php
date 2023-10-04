@@ -1,34 +1,4 @@
 <x-default-layout>
-
-    @section('title')
-    Client
-    @endsection
-
-    @section('breadcrumbs')
-        {{ Breadcrumbs::render('dashboard') }}
-    @endsection
-
-    <div class="row g-5 g-xl-10 mb-5 mb-xl-10">
-        <!--begin::Col-->
-        <div class="col-md-6 col-lg-6 col-xl-6 col-xxl-4 mb-md-5 mb-xl-10">
-            @include('partials/widgets/cards/currentMonthProfit')
-            @include('partials/widgets/cards/lastMonthProfit')
-        </div>
-        <!--end::Col-->
-        <!--begin::Col-->
-        <div class="col-md-6 col-lg-6 col-xl-6 col-xxl-4 mb-md-5 mb-xl-10">
-            @include('partials/widgets/cards/annualProfit')
-            @include('partials/widgets/cards/allProfit')
-        </div>
-        <!--end::Col-->
-        <!--begin::Col-->
-        <div class="col-md-6 col-lg-6 col-xl-6 col-xxl-4 mb-md-5 mb-xl-10">
-            @include('partials/widgets/cards/positions')
-            @include('partials/widgets/cards/totalShipped')
-        </div>
-        <!--end::Col-->
-    </div>
-
     <div>
         <!--begin::Col-->
         <div class="col-xl-12">
@@ -57,17 +27,23 @@
                             <thead>
                                 <tr class="fs-6 fw-bold text-gray-500 border-bottom-0">
                                     <th class="p-0 pb-3 min-w-200px text-center">MONTH</th>
+                                    <th class="p-0 pb-3 min-w-200px text-center">CLIENT NAME</th>
                                     <th class="p-0 pb-3 min-w-200px text-center">TOTAL PROFIT</th>
                                 </tr>
                             </thead>
                             <!--end::Table head-->
                             <!--begin::Table body-->
                             <tbody>
-                                @foreach($profitList as $profit)
+                                @foreach ($profitList as $profit)
                                     <tr>
                                         <td class="text-center pe-0">
                                             <!--begin::Label-->
                                             <span class="text-gray-600 fw-bold fs-6">{{ $profit->month }}</span>
+                                            <!--end::Label-->
+                                        </td>
+                                        <td class="text-center pe-0">
+                                            <!--begin::Label-->
+                                            <span class="text-gray-600 fw-bold fs-6">{{ $profit->client_name }}</span>
                                             <!--end::Label-->
                                         </td>
                                         <td>
