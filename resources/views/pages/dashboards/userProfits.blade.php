@@ -31,7 +31,7 @@
                     <!--begin::Table container-->
                     <div class="table-responsive">
                         <!--begin::Table-->
-                        <table class="table table-row-dashed align-middle gs-0 gy-3 my-0">
+                        <table class="table table-row-dashed align-middle gs-0 gy-5 my-0">
                             <!--begin::Table head-->
                             <thead>
                                 <tr class="fs-6 fw-bold text-gray-500 border-bottom-0">
@@ -81,6 +81,44 @@
                 <!--end: Card Body-->
             </div>
             <!--end::Table widget 14-->
+                    <div class="d-flex justify-content-center mt-3">
+                        <ul class="pagination">
+                            <!-- Previous Page Link -->
+                            @if ($user_profits->onFirstPage())
+                                <li class="page-item disabled">
+                                    <a class="page-link" href="#" tabindex="-1" aria-disabled="true">&laquo;</a>
+                                </li>
+                            @else
+                                <li class="page-item">
+                                    <a class="page-link" href="{{ $user_profits->previousPageUrl() }}" tabindex="-1" aria-disabled="false">&laquo;</a>
+                                </li>
+                            @endif
+                    
+                            <!-- Pagination links -->
+                            @for ($page = 1; $page <= $user_profits->lastPage(); $page++)
+                                @if ($page == $user_profits->currentPage())
+                                    <li class="page-item active">
+                                        <a class="page-link" href="#">{{ $page }}</a>
+                                    </li>
+                                @else
+                                    <li class="page-item">
+                                        <a class="page-link" href="{{ $user_profits->url($page) }}">{{ $page }}</a>
+                                    </li>
+                                @endif
+                            @endfor
+                    
+                            <!-- Next Page Link -->
+                            @if ($user_profits->hasMorePages())
+                                <li class="page-item">
+                                    <a class="page-link" href="{{ $user_profits->nextPageUrl() }}">&raquo;</a>
+                                </li>
+                            @else
+                                <li class="page-item disabled">
+                                    <a class="page-link" href="#" tabindex="-1" aria-disabled="true">&raquo;</a>
+                                </li>
+                            @endif
+                        </ul>
+                    </div>
 
         </div>
         <!--end::Col-->

@@ -29,7 +29,6 @@ class ProfitCalculate extends Command
      */
     public function handle(): void
     {
-        //
         $currentMonthStartDate = now()->startOfMonth();
         $currentMonthEndDate = now()->endOfMonth();
 
@@ -46,15 +45,13 @@ class ProfitCalculate extends Command
         $totalProfit = $profitPerPosition * $totalPositions;
 
         $userProfit = new UserProfit;
-        $userProfit->updateOrCreate(
-            [
-                'date_range' => "{$currentMonthStartDate->format('m/d')} - {$currentMonthEndDate->format('m/d')}",
-                'position' => $totalPositions,
-                'profit_per_position' => $profitPerPosition,
-                'total_profit' => $totalProfit,
-            ]
-        );
 
-        $this->info('User profits updated successfully.');
+        $userProfit->date_range = "{$currentMonthStartDate->format('m/d')} - {$currentMonthEndDate->format('m/d')}";
+        $userProfit->position = $totalPositions;
+        $userProfit->profit_per_position = $profitPerPosition;
+        $userProfit->total_profit = $totalProfit;
+
+        // Save the UserProfit record
+        $userProfit->save();
     }
 }

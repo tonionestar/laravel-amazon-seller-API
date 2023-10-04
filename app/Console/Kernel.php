@@ -23,7 +23,7 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         $schedule->command('amazon:fetch-data')->hourly();
-        $schedule->command('profit:calculate')->everyMinute();
+        $schedule->command('profit:calculate')->hourly();
     }
 
     /**

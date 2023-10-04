@@ -13,7 +13,6 @@ return new class extends Migration
     {
         Schema::create('user_profits', function (Blueprint $table) {
             $table->id();
-            $table->integer('user_id');
             $table->string('date_range');
             $table->integer('position');
             $table->decimal('profit_per_position', 8, 2);

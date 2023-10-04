@@ -107,11 +107,8 @@ class DashboardController extends Controller
         $totalClients = User::where('role', 'Client')->count();
         if ($logged_user->role !== 'Admin') {
             $client->totalPositions = User::where('email', $logged_user->email)->sum('position');
-            $client->totalProfitCurrentMonth = UserProfit::where('user_id', $logged_user->id)->value('total_profit');
         } else {
             $client->totalPositions = User::where('role', 'Client')->sum('position'); // This is clients' sum case.
-            $client->totalProfitCurrentMonth =
-                Order::whereBetween('order_date', [$currentMonthStartDate, $currentMonthEndDate])->sum('profit');
         }
 
         $client->totalProfitLastMonth = Order::whereBetween('order_date', [$lastMonthStartDate, $lastMonthEndDate])->sum('profit');
@@ -136,8 +133,6 @@ class DashboardController extends Controller
         $currentMonthStartDate = now()->startOfMonth();
         $currentMonthEndDate = now()->endOfMonth();
 
-        $user = Auth::user();
-
         $totalPositions = User::where('role', 'Client')->sum('position');
 
         $totalProfitCurrentMonth = Order::whereBetween('order_date', [$currentMonthStartDate, $currentMonthEndDate])->sum('profit');
@@ -152,7 +147,6 @@ class DashboardController extends Controller
 
         $userProfit = new UserProfit;
 
-        $userProfit->user_id = $user->id;
         $userProfit->date_range = "{$currentMonthStartDate->format('m/d')} - {$currentMonthEndDate->format('m/d')}";
         $userProfit->position = $totalPositions;
         $userProfit->profit_per_position = $profitPerPosition;
@@ -161,7 +155,7 @@ class DashboardController extends Controller
         // Save the UserProfit record
         $userProfit->save();
 
-        $user_profits = UserProfit::all();
+        $user_profits = UserProfit::paginate(10);;
 
         addVendors(['amcharts', 'amcharts-maps', 'amcharts-stock']);
         return view('pages.dashboards.userProfits', ['user_profits' => $user_profits]);
