@@ -117,56 +117,32 @@ class DashboardController extends Controller
 
     public function userProfits()
     {
-        $currentMonthStartDate = now()->startOfMonth();
-        $currentMonthEndDate = now()->endOfMonth();
-        $lastMonthStartDate = now()->subMonths(1)->startOfMonth();
-        $lastMonthEndDate = now()->subMonths(1)->endOfMonth();
-        $yearStartDate = now()->startOfYear();
-        $yearEndDate = now()->endOfYear();
+        // $currentMonthStartDate = now()->startOfMonth();
+        // $currentMonthEndDate = now()->endOfMonth();
 
-        $totalClients = User::where('role', 'Client')->count();
-        $totalPositions = User::where('role', 'Client')->sum('position');
+        // $totalPositions = User::where('role', 'Client')->sum('position');
 
-        $totalProfitCurrentMonth = Order::whereBetween('order_date', [$currentMonthStartDate, $currentMonthEndDate])->sum('profit');
-        $totalProfitLastMonth = Order::whereBetween('order_date', [$lastMonthStartDate, $lastMonthEndDate])->sum('profit');
-        $totalProfitYear = Order::whereBetween('order_date', [$yearStartDate, $yearEndDate])->sum('profit');
-        $totalProfitAllTime = Order::sum('profit');
+        // $totalProfitCurrentMonth = Order::whereBetween('order_date', [$currentMonthStartDate, $currentMonthEndDate])->sum('profit');
 
-        $totalUnitsShippedAllTime = Order::sum('quantity');
+        // if ($totalPositions > 0) {
+        //     $profitPerPosition = ($totalProfitCurrentMonth * 0.7) / $totalPositions;
+        // } else {
+        //     $profitPerPosition = 0;
+        // }
 
-        $users = User::where('role', 'Client')->get();
+        // $totalProfit = $profitPerPosition * $totalPositions;
 
-        foreach ($users as $user) {
+        // $userProfit = new UserProfit;
+        // $userProfit->updateOrCreate(
+        //     [
+        //         'date_range' => "{$currentMonthStartDate->format('m/d')} - {$currentMonthEndDate->format('m/d')}",
+        //         'position' => $totalPositions,
+        //         'profit_per_position' => $profitPerPosition,
+        //         'total_profit' => $totalProfit,
+        //     ]
 
-            $positionsPerClient = $user->position;
+        // );
 
-            if ($totalPositions > 0) {
-                $profitPerPosition = ($totalProfitCurrentMonth * 0.7) / $totalPositions;
-            } else {
-                // Handle the division by zero error if totalPositions is zero
-                // You can set a default value or throw an exception
-                $profitPerPosition = 0; // Skip this iteration and proceed to the next user
-            }
-
-            $currentProfit = $profitPerPosition * $positionsPerClient;
-
-            $userProfit = new UserProfit;
-            $userProfit->updateOrCreate(
-                ['user_id' => $user->id],
-                [
-                    'user_id' => $user->id,
-                    'date_range' => "{$currentMonthStartDate->format('m/d')} - {$currentMonthEndDate->format('m/d')}",
-                    'position' => $positionsPerClient,
-                    'profit_per_position' => $profitPerPosition,
-                    'total_profit' => $currentProfit,
-                ]
-
-            );
-            // $userProfit->last_month_profit = $totalProfitLastMonth;
-            // $userProfit->annual_profit = $totalProfitYear;
-            // $userProfit->all_time_profit = $totalProfitAllTime;
-            // $userProfit->total_units_shipped = $totalUnitsShippedAllTime;
-        }
         $user_profits = UserProfit::all();
 
         addVendors(['amcharts', 'amcharts-maps', 'amcharts-stock']);

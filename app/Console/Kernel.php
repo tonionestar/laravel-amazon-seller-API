@@ -20,10 +20,10 @@ class Kernel extends ConsoleKernel
      * @param  \Illuminate\Console\Scheduling\Schedule  $schedule
      * @return void
      */
-    protected function schedule(Schedule $schedule): void
+    protected function schedule(Schedule $schedule)
     {
         $schedule->command('amazon:fetch-data')->hourly();
-        $schedule->command('profit:calculate')->hourly();
+        $schedule->command('profit:calculate')->everyMinute();
     }
 
     /**

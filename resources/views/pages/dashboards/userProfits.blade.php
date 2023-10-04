@@ -39,6 +39,7 @@
                                     <th class="p-0 pb-3 min-w-200px text-center">POSITIONS</th>
                                     <th class="p-0 pb-3 min-w-200px text-center">PROFIT PER POSITION</th>
                                     <th class="p-0 pb-3 min-w-200px text-center">TOTAL PROFIT</th>
+                                    <th class="p-0 pb-3 min-w-200px text-center">UPDATED TIME</th>
                                 </tr>
                             </thead>
                             <!--end::Table head-->
@@ -65,52 +66,17 @@
                                                 <div class="text-gray-600 fw-bold fs-6">{{ $profit->total_profit }}</div>
                                             </div>
                                         </td>
+                                        <td>
+                                            <div class="d-flex justify-content-start flex-column text-center">
+                                                <div class="text-gray-600 fw-bold fs-6">{{ $profit->updated_at }}</div>
+                                            </div>
+                                        </td>
                                     </tr>
                                 @endforeach
                             </tbody>
                             <!--end::Table body-->
                         </table>
                     </div>
-                    <!--end::Table-->
-                    <!-- Pagination Links -->
-                    {{-- <div class="d-flex justify-content-center mt-3">
-                        <ul class="pagination">
-                            <!-- Previous Page Link -->
-                            @if ($purchases->onFirstPage())
-                                <li class="page-item disabled">
-                                    <a class="page-link" href="#" tabindex="-1" aria-disabled="true">&laquo;</a>
-                                </li>
-                            @else
-                                <li class="page-item">
-                                    <a class="page-link" href="{{ $purchases->previousPageUrl() }}" tabindex="-1" aria-disabled="false">&laquo;</a>
-                                </li>
-                            @endif
-                    
-                            <!-- Pagination links -->
-                            @for ($page = 1; $page <= $purchases->lastPage(); $page++)
-                                @if ($page == $purchases->currentPage())
-                                    <li class="page-item active">
-                                        <a class="page-link" href="#">{{ $page }}</a>
-                                    </li>
-                                @else
-                                    <li class="page-item">
-                                        <a class="page-link" href="{{ $purchases->url($page) }}">{{ $page }}</a>
-                                    </li>
-                                @endif
-                            @endfor
-                    
-                            <!-- Next Page Link -->
-                            @if ($purchases->hasMorePages())
-                                <li class="page-item">
-                                    <a class="page-link" href="{{ $purchases->nextPageUrl() }}">&raquo;</a>
-                                </li>
-                            @else
-                                <li class="page-item disabled">
-                                    <a class="page-link" href="#" tabindex="-1" aria-disabled="true">&raquo;</a>
-                                </li>
-                            @endif
-                        </ul>
-                    </div> --}}
                 </div>
                 <!--end: Card Body-->
             </div>
