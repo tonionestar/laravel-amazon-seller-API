@@ -9,7 +9,9 @@ use App\Models\Order;
 use App\Models\UserProfit;
 use App\Models\User;
 use App\Models\Purchase;
+use App\Models\ProfitList;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 
 class DashboardController extends Controller
 {
@@ -100,48 +102,64 @@ class DashboardController extends Controller
         $yearStartDate = now()->startOfYear();
         $yearEndDate = now()->endOfYear();
 
-        $totalClients = User::where('role', 'Client')->count();
-        $client->totalPositions = User::where('role', 'Client')->sum('position');
+        $logged_user = Auth::user();
 
-        $client->totalProfitCurrentMonth = Order::whereBetween('order_date', [$currentMonthStartDate, $currentMonthEndDate])->sum('profit');
+        $totalClients = User::where('role', 'Client')->count();
+        if ($logged_user->role !== 'Admin') {
+            $client->totalPositions = User::where('email', $logged_user->email)->sum('position');
+            $client->totalProfitCurrentMonth = UserProfit::where('user_id', $logged_user->id)->value('total_profit');
+        } else {
+            $client->totalPositions = User::where('role', 'Client')->sum('position'); // This is clients' sum case.
+            $client->totalProfitCurrentMonth =
+                Order::whereBetween('order_date', [$currentMonthStartDate, $currentMonthEndDate])->sum('profit');
+        }
+
         $client->totalProfitLastMonth = Order::whereBetween('order_date', [$lastMonthStartDate, $lastMonthEndDate])->sum('profit');
         $client->totalProfitYear = Order::whereBetween('order_date', [$yearStartDate, $yearEndDate])->sum('profit');
         $client->totalProfitAllTime = Order::sum('profit');
 
         $client->totalUnitsShippedAllTime = Order::sum('quantity');
 
+        if ($logged_user->role !== 'Admin') {
+            $profitList = ProfitList::where('user_id', $logged_user->id)->get();
+        } else {
+            $profitList = ProfitList::all(); // Set to null if logged user is an Admin
+        }
+
         addVendors(['amcharts', 'amcharts-maps', 'amcharts-stock']);
 
-        return view('pages.dashboards.client', ['client' => $client]);
+        return view('pages.dashboards.client', compact('client', 'profitList'));
     }
 
     public function userProfits()
     {
-        // $currentMonthStartDate = now()->startOfMonth();
-        // $currentMonthEndDate = now()->endOfMonth();
+        $currentMonthStartDate = now()->startOfMonth();
+        $currentMonthEndDate = now()->endOfMonth();
 
-        // $totalPositions = User::where('role', 'Client')->sum('position');
+        $user = Auth::user();
 
-        // $totalProfitCurrentMonth = Order::whereBetween('order_date', [$currentMonthStartDate, $currentMonthEndDate])->sum('profit');
+        $totalPositions = User::where('role', 'Client')->sum('position');
 
-        // if ($totalPositions > 0) {
-        //     $profitPerPosition = ($totalProfitCurrentMonth * 0.7) / $totalPositions;
-        // } else {
-        //     $profitPerPosition = 0;
-        // }
+        $totalProfitCurrentMonth = Order::whereBetween('order_date', [$currentMonthStartDate, $currentMonthEndDate])->sum('profit');
 
-        // $totalProfit = $profitPerPosition * $totalPositions;
+        if ($totalPositions > 0) {
+            $profitPerPosition = ($totalProfitCurrentMonth * 0.7) / $totalPositions;
+        } else {
+            $profitPerPosition = 0;
+        }
 
-        // $userProfit = new UserProfit;
-        // $userProfit->updateOrCreate(
-        //     [
-        //         'date_range' => "{$currentMonthStartDate->format('m/d')} - {$currentMonthEndDate->format('m/d')}",
-        //         'position' => $totalPositions,
-        //         'profit_per_position' => $profitPerPosition,
-        //         'total_profit' => $totalProfit,
-        //     ]
+        $totalProfit = $profitPerPosition * $totalPositions;
 
-        // );
+        $userProfit = new UserProfit;
+
+        $userProfit->user_id = $user->id;
+        $userProfit->date_range = "{$currentMonthStartDate->format('m/d')} - {$currentMonthEndDate->format('m/d')}";
+        $userProfit->position = $totalPositions;
+        $userProfit->profit_per_position = $profitPerPosition;
+        $userProfit->total_profit = $totalProfit;
+
+        // Save the UserProfit record
+        $userProfit->save();
 
         $user_profits = UserProfit::all();
 

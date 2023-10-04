@@ -12,12 +12,11 @@ class UserProfit extends Model
     public $table = 'user_profits';
 
     protected $fillable = [
-        // 'user_id',
+        'user_id',
         'date_range',
         'position',
         'profit_per_position',
         'total_profit',
-        'cost_per_unit',
     ];
 
     public function user()
