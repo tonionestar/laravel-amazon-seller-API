@@ -28,7 +28,7 @@
     <!--begin::Menu separator-->
     <div class="separator my-2"></div>
     <!--end::Menu separator-->
-    <!--begin::Menu item-->
+    {{-- <!--begin::Menu item-->
     <div class="menu-item px-5">
         <a href="#" class="menu-link px-5">My Profile</a>
     </div>
@@ -93,9 +93,9 @@
     <div class="menu-item px-5">
         <a href="#" class="menu-link px-5">My Statements</a>
     </div>
-    <!--end::Menu item-->
+    <!--end::Menu item--> --}}
     <!--begin::Menu separator-->
-    <div class="separator my-2"></div>
+    {{-- <div class="separator my-2"></div> --}}
     <!--end::Menu separator-->
     <!--begin::Menu item-->
     <div class="menu-item px-5" data-kt-menu-trigger="{default: 'click', lg: 'hover'}" data-kt-menu-placement="left-start" data-kt-menu-offset="-15px, 0">
@@ -106,7 +106,7 @@
 		@include('partials/theme-mode/__menu')
 	</div>
 	<!--end::Menu item-->
-	<!--begin::Menu item-->
+	{{-- <!--begin::Menu item-->
 	<div class="menu-item px-5" data-kt-menu-trigger="{default: 'click', lg: 'hover'}" data-kt-menu-placement="left-start" data-kt-menu-offset="-15px, 0">
 		<a href="#" class="menu-link px-5">
             <span class="menu-title position-relative">Language
@@ -164,12 +164,12 @@
         </div>
         <!--end::Menu sub-->
     </div>
-    <!--end::Menu item-->
+    <!--end::Menu item--> --}}
     <!--begin::Menu item-->
-    <div class="menu-item px-5 my-1">
+    {{-- <div class="menu-item px-5 my-1">
         <a href="#" class="menu-link px-5">Account Settings</a>
     </div>
-    <!--end::Menu item-->
+    <!--end::Menu item--> --}}
     <!--begin::Menu item-->
     <div class="menu-item px-5">
         <a class="button-ajax menu-link px-5" href="#" data-action="{{ route('logout') }}" data-method="post" data-csrf="{{ csrf_token() }}" data-reload="true">
