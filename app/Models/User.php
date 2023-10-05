@@ -42,17 +42,6 @@ class User extends Authenticatable
         'remember_token',
     ];
 
-    protected static function boot()
-    {
-        parent::boot();
-
-        // Listening for the 'deleting' event
-        static::deleting(function ($user) {
-            // Delete the related user_profits data
-            UserProfit::where('user_id', $user->id)->delete();
-        });
-    }
-
     /**
      * The attributes that should be cast.
      *
