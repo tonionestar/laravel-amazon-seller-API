@@ -26,8 +26,7 @@ class FetchAmazonData extends Command
      */
     public function handle(): void
     {
-        //
-        $cronjob = new DashboardController();
-        $cronjob->order();
+        $dashboardController = new DashboardController();
+        $dashboardController->order();
     }
 }
