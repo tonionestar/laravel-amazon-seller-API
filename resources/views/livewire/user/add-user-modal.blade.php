@@ -106,6 +106,7 @@
                                 <select name="position" aria-label="Number of Positions" class="form-select"
                                     data-dropdown-parent="#kt_modal_add_user" id="position" required>
                                     <option></option>
+                                    <option value="1">0</option>
                                     <option value="1">1</option>
                                     <option value="2">2</option>
                                     <option value="3">3</option>

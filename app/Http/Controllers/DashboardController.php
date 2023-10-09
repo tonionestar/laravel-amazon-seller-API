@@ -92,7 +92,7 @@ class DashboardController extends Controller
         return view('pages.dashboards.admin', ['orders' => $orders]);
     }
 
-    public function client()
+    public function client(Request $request)
     {
         $client = new \stdClass();;
         $currentMonthStartDate = now()->startOfMonth();
@@ -103,7 +103,8 @@ class DashboardController extends Controller
         $yearEndDate = now()->endOfYear();
 
         $logged_user = Auth::user();
-
+        $data = $request->query();
+        $user_id =  isset($data['id']) ? $data['id'] : '';
         $totalClients = User::where('role', 'Client')->count();
         if ($logged_user->role !== 'Admin') {
             $client->totalPositions = User::where('email', $logged_user->email)->sum('position');
@@ -120,7 +121,7 @@ class DashboardController extends Controller
         if ($logged_user->role !== 'Admin') {
             $profitList = ProfitList::where('user_id', $logged_user->id)->get();
         } else {
-            $profitList = ProfitList::all(); // Set to null if logged user is an Admin
+            $profitList = ProfitList::where('user_id', $user_id)->get();
         }
 
         addVendors(['amcharts', 'amcharts-maps', 'amcharts-stock']);
