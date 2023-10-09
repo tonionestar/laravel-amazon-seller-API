@@ -123,12 +123,12 @@
                                                 <!--begin::Menu-->
                                                 <div class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-semibold fs-7 w-125px py-4" data-kt-menu="true">
                                                     <!--begin::Menu item-->
-                                                    <div class="menu-item px-3">
+                                                    {{-- <div class="menu-item px-3">
                                                         <a href="{{ route('user-management.users.show', $user) }}" class="menu-link px-3">
                                                             View
                                                         </a>
                                                     </div>
-                                                    <!--end::Menu item-->
+                                                    <!--end::Menu item--> --}}
 
                                                     <!--begin::Menu item-->
                                                     <div class="menu-item px-3">
@@ -139,7 +139,7 @@
                                                     </div>
                                                     <!--end::Menu item-->
 
-                                                    <!--begin::Menu item-->
+                                                    {{-- <!--begin::Menu item-->
                                                     <form action="{{ route('user-management.users.destroy', $user) }}" method="POST" id="deleteForm_{{ $user->id }}" style="display: none">
                                                         @csrf
                                                         @method('DELETE')
@@ -149,7 +149,7 @@
                                                             Delete
                                                         </a>
                                                     </div>
-                                                    <!--end::Menu item-->
+                                                    <!--end::Menu item--> --}}
                                                 </div>
                                             </div>
                                         </td>
