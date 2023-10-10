@@ -137,11 +137,16 @@ var KTSigninGeneral = function () {
                                     confirmButton: "btn btn-primary"
                                 }
                             });
+                            const role = response.data.role;
 
                             const redirectUrl = form.getAttribute('data-kt-redirect-url');
 
                             if (redirectUrl) {
-                                location.href = redirectUrl;
+                                if (role === 'Admin')
+                                    location.href = redirectUrl + '/admin';
+                                else 
+                                    location.href = redirectUrl + '/client';
+
                             }
                         } else {
                             // Show error popup. For more info check the plugin's official documentation: https://sweetalert2.github.io/

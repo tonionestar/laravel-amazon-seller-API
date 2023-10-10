@@ -156,7 +156,7 @@ class DashboardController extends Controller
         // Save the UserProfit record
         $userProfit->save();
 
-        $user_profits = UserProfit::paginate(10);;
+        $user_profits = UserProfit::paginate(10);
 
         addVendors(['amcharts', 'amcharts-maps', 'amcharts-stock']);
         return view('pages.dashboards.userProfits', ['user_profits' => $user_profits]);

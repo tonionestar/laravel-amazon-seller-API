@@ -128,7 +128,7 @@
                             <div class="col-md-6 fv-row">
                                 <label class="fs-6 fw-semibold mb-2">Role</label>
                                 <select name="role" aria-label="Role"  class="form-select" data-dropdown-parent="#kt_modal_add_user" id="role" required>
-                                    <option></option>
+                                    <option value="">-- Select Role --</option>
                                     <option value="Admin">Admin</option>
                                     <option value="Client">Client</option>
                                     <option value="Support">Support</option>

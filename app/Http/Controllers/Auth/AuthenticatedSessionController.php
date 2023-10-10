@@ -32,16 +32,30 @@ class AuthenticatedSessionController extends Controller
      */
     public function store(LoginRequest $request)
     {
+        $credentials = $request->only('email', 'password');
         $request->authenticate();
-
         $request->session()->regenerate();
 
-        $request->user()->update([
-            'last_login_at' => Carbon::now()->toDateTimeString(),
-            'last_login_ip' => $request->getClientIp()
-        ]);
+        if (Auth::attempt($credentials)) {
+            $user = Auth::user();
 
-        return redirect()->to(RouteServiceProvider::HOME);
+            // Access the user's data
+            $role = $user->role;
+            // ... access other properties as needed
+
+            $request->user()->update([
+                'last_login_at' => Carbon::now()->toDateTimeString(),
+                'last_login_ip' => $request->getClientIp()
+            ]);
+
+            return response()->json(['role' => $role]);
+
+            // Redirect or return a response if needed
+            if ($role === 'Admin')
+                return redirect()->to(RouteServiceProvider::ADMIN);
+            else
+                return redirect()->to(RouteServiceProvider::CLIENT);
+        }
     }
 
     /**
