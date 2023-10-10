@@ -54,17 +54,20 @@
                         </div>
                         <div class="fv-row mb-7">
                             <label class="fs-6 fw-semibold mb-2">Password</label>
-                            <input type="password" class="form-control form-control-solid" placeholder="" name="password" required />
+                            <input type="password" class="form-control form-control-solid" placeholder="" name="password" id="password" required />
                             @error('password')
                                     <div class="alert alert-danger">{{ $message }}</div>
                             @enderror
                         </div>
                         <div class="fv-row mb-7">
                             <label class="fs-6 fw-semibold mb-2">Confirm Password</label>
-                            <input type="password" class="form-control form-control-solid" placeholder="" name="confirmPassword" required />
+                            <input type="password" class="form-control form-control-solid" placeholder="" name="confirmPassword" id="confirmPassword" required />
                             @error('confirmPassword')
                                     <div class="alert alert-danger">{{ $message }}</div>
                             @enderror
+                        </div>
+                        <div class="fv-row mb-7" style="display: flex; justify-content: center;">
+                            <button id="passwordButton" type="button" class="btn btn-primary" style="">Set New Password</button>
                         </div>
                         <div class="d-flex flex-column mb-7 fv-row">
                             <label class="fs-6 fw-semibold mb-2">Address Line 1</label>
@@ -105,8 +108,8 @@
                                 <label class="fs-6 fw-semibold mb-2">Number of Positions</label>
                                 <select name="position" aria-label="Number of Positions" class="form-select"
                                     data-dropdown-parent="#kt_modal_add_user" id="position" required>
-                                    <option></option>
-                                    <option value="1">0</option>
+                                    <option value="">-- Select Position --</option>
+                                    <option value="0">0</option>
                                     <option value="1">1</option>
                                     <option value="2">2</option>
                                     <option value="3">3</option>
@@ -192,6 +195,47 @@
 
 <script type="text/javascript">
     $(document).ready(function () {
+        $('#kt_modal_add_user_scroll :nth-child(6)').hide();
+
+        $('a#addButton').on('click', () => {
+            $('#kt_modal_add_user_scroll :nth-child(4)').show();
+            $('#kt_modal_add_user_scroll :nth-child(5)').show();
+            $('#kt_modal_add_user_scroll :nth-child(6)').hide();
+            $('input[name="password"]').prop('required', true);
+            $('input[name="confirmPassword"]').prop('required', true);
+        });
+
+        $('a#editButton').on('click', () => {
+            if ($('a#editButton').data('kt-action') === 'update_row') {
+                $('#kt_modal_add_user_scroll :nth-child(4)').hide();
+                $('#kt_modal_add_user_scroll :nth-child(5)').hide();
+                $('#kt_modal_add_user_scroll :nth-child(6)').show();
+                $('input[name="password"]').prop('required', false);
+                $('input[name="confirmPassword"]').prop('required', false);
+            } else {
+                $('#kt_modal_add_user_scroll :nth-child(4)').show();
+                $('#kt_modal_add_user_scroll :nth-child(5)').show();
+                $('#kt_modal_add_user_scroll :nth-child(6)').hide();
+                $('input[name="password"]').prop('required', true);
+                $('input[name="confirmPassword"]').prop('required', true);
+            }
+
+            $('#passwordButton').click(function() {
+                $('#kt_modal_add_user_scroll :nth-child(4)').show();
+                $('#kt_modal_add_user_scroll :nth-child(5)').show();
+                $('#kt_modal_add_user_scroll :nth-child(6)').hide();
+                $('input[name="password"]').prop('required', true);
+                $('input[name="confirmPassword"]').prop('required', true);
+            });
+
+            $('#kt_modal_add_user_scroll').on('hidden.bs.modal', function() {
+                $('#passwordButton').show();
+                $('#kt_modal_add_user_scroll :nth-child(4)').hide();
+                $('#kt_modal_add_user_scroll :nth-child(5)').hide();
+                $('input[name="password"]').prop('required', true);
+                $('input[name="confirmPassword"]').prop('required', true);
+            });
+        });
         $('button[type="submit"][data-kt-users-modal-action="submit"]').on('click', function(e) {
             // Check if firstname field is empty
             if($.trim($('input[name="firstname"]').val()) === '') {
@@ -218,17 +262,22 @@
                 toastr.error('Please enter a valid phone number in the format 333 333 3333');
                 return;
             }
-            // Check if password field is empty and secure
-            if($.trim($('input[name="password"]').val()) === '' || !validatePassword($('input[name="password"]').val())) {
-                e.preventDefault();
-                toastr.error('Please enter a strong password. Passwords must contain at least one number, one lowercase and one uppercase letter, one special symbol and be at least 8 characters long');
-                return;
-            }
-            // Check if password and password confirmation are matching
-            if($('input[name="password"]').val() !== $('input[name="confirmPassword"]').val()) {
-                e.preventDefault();
-                toastr.error('The password confirmation does not match the password');
-                return;
+            // // Check if password is needed
+            if ($('#kt_modal_add_user_scroll :nth-child(6)').css('display') === 'none') {
+                console.log('display none')
+
+                // Check if password field is empty and secure
+                if($.trim($('input[name="password"]').val()) === '' || !validatePassword($('input[name="password"]').val())) {
+                    e.preventDefault();
+                    toastr.error('Please enter a strong password. Passwords must contain at least one number, one lowercase and one uppercase letter, one special symbol and be at least 8 characters long');
+                    return;
+                }
+                // Check if password and password confirmation are matching
+                if($('input[name="password"]').val() !== $('input[name="confirmPassword"]').val()) {
+                    e.preventDefault();
+                    toastr.error('The password confirmation does not match the password');
+                    return;
+                }
             }
         });
     

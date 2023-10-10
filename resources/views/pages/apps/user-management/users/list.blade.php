@@ -278,6 +278,8 @@ $('#kt_modal_add_user').on('show.bs.modal', async function (event) {
         var lastName = names.slice(1).join(' '); 
         var address = data.address;
         var addressParts = address.split(' ');
+        var position = data.position;
+        var role = data.role;
 
         var zipcode = addressParts.pop();
         var state = addressParts.pop();
