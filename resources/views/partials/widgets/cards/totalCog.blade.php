@@ -2,7 +2,7 @@
     $currentMonthCOG = App\Models\Order::whereMonth('order_date', now()->month)->sum('cost_per_unit');
 @endphp
 
-<div class="card card-theme h-md-50 mb-5 mb-xl-10">
+<div class="card card-theme h-md-50 mb-5 mb-xl-10" style="background-color: #d63384;background-image:url('assets/media/patterns/vector-1.png')">
   <!--begin::Content-->
   <div class="card-body d-flex flex-column align-items-center">
     <!--begin::Info-->

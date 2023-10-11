@@ -2,7 +2,7 @@
   // Get the second-to-last value from the array
   $currentMonth = $profitList[count($profitList) - 1]->per_user_profit;
 @endphp
-<div class="card card-theme h-md-50 mb-5 mb-xl-10">
+<div class="card card-theme h-md-50 mb-5 mb-xl-10" style="background-color: #50CD89;background-image:url('assets/media/patterns/vector-1.png')">
   <!--begin::Content-->
   <div class="card-body d-flex flex-column align-items-center">
     <!--begin::Info-->

@@ -6,79 +6,68 @@
 		<div class="menu menu-column menu-rounded menu-sub-indention px-3 fw-semibold fs-6" id="#kt_app_sidebar_menu" data-kt-menu="true" data-kt-menu-expand="false">
 			<!--begin:Menu item-->
 			<div data-kt-menu-trigger="click" class="menu-item menu-accordion {{ request()->is('dashboard*') || request()->is('dashboard') ? 'here show' : '' }}">
-				<!--begin:Menu link-->
-				<span class="menu-link">
-					<span class="menu-icon">{!! getIcon('element-11', 'fs-2') !!}</span>
-					<span class="menu-title">Dashboards</span>
-					<span class="menu-arrow"></span>
-				</span>
-				<!--end:Menu link-->
-				<!--begin:Menu sub-->
-				<div class="menu-sub menu-sub-accordion">
-					<!--begin:Menu item-->
-					<div class="menu-item">
-						<!--begin:Menu link-->
-						{{-- <a class="menu-link {{ request()->routeIs('dashboard') ? 'active' : '' }}" href="{{ route('dashboard') }}">
-							<span class="menu-bullet">
-								<span class="bullet bullet-dot"></span>
+				<!--begin:Menu item-->
+				<div class="menu-item">
+					<!--begin:Menu link-->
+					{{-- <a class="menu-link {{ request()->routeIs('dashboard') ? 'active' : '' }}" href="{{ route('dashboard') }}">
+						<span class="menu-bullet">
+							<span class="bullet bullet-dot"></span>
+						</span>
+						<span class="menu-title">Default</span>
+					</a> --}}
+
+					@php
+						$user = auth()->user();
+						$role = $user->role;
+					@endphp
+
+					@if($role === 'Admin')
+						<a class="menu-link {{ request()->routeIs('dashboard.admin') ? 'active' : '' }}" href="{{ route('dashboard.admin') }}">
+							<span class="menu-icon">
+								<i class="ki-duotone ki-chart-simple-2 fs-3"><span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span></i>
 							</span>
-							<span class="menu-title">Default</span>
-						</a> --}}
+							<span class="menu-title">ADMIN DASHBOARD</span>
+						</a>
+						<a class="menu-link {{ request()->routeIs('dashboard.orders') ? 'active' : '' }}" href="{{ route('dashboard.orders') }}">
+							<span class="menu-icon">
+								<i class="ki-duotone ki-abstract-41 fs-3"><span class="path1"></span><span class="path2"></span></i>
+							</span>
+							<span class="menu-title">ORDERS</span>
+						</a>
 
-						@php
-							$user = auth()->user();
-							$role = $user->role;
-						@endphp
+						<a class="menu-link {{ request()->routeIs('dashboard.purchases') ? 'active' : '' }}" href="{{ route('dashboard.purchases') }}">
+							<span class="menu-icon">
+								<i class="ki-duotone ki-abstract-25 fs-3"><span class="path1"></span><span class="path2"></span></i>
+							</span>
+							<span class="menu-title">PURCHASES</span>
+						</a>
 
-						@if($role === 'Admin')
-							<a class="menu-link {{ request()->routeIs('dashboard.admin') ? 'active' : '' }}" href="{{ route('dashboard.admin') }}">
-								<span class="menu-icon">
-									<i class="ki-duotone ki-chart-simple-2 fs-3"><span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span></i>
-								</span>
-								<span class="menu-title">ADMIN DASHBOARD</span>
-							</a>
-							<a class="menu-link {{ request()->routeIs('dashboard.orders') ? 'active' : '' }}" href="{{ route('dashboard.orders') }}">
-								<span class="menu-icon">
-									<i class="ki-duotone ki-abstract-41 fs-3"><span class="path1"></span><span class="path2"></span></i>
-								</span>
-								<span class="menu-title">ORDERS</span>
-							</a>
+						<a class="menu-link {{ request()->routeIs('dashboard.userProfits') ? 'active' : '' }}" href="{{ route('dashboard.userProfits') }}">
+							<span class="menu-icon">
+								<i class="ki-duotone ki-calendar-2 fs-3"><span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span><span class="path5"></span></i>
+							</span>
+							<span class="menu-title">USER PROFITS</span>
+						</a>
 
-							<a class="menu-link {{ request()->routeIs('dashboard.purchases') ? 'active' : '' }}" href="{{ route('dashboard.purchases') }}">
-								<span class="menu-icon">
-									<i class="ki-duotone ki-abstract-25 fs-3"><span class="path1"></span><span class="path2"></span></i>
-								</span>
-								<span class="menu-title">PURCHASES</span>
-							</a>
+						<a class="menu-link {{ request()->routeIs('dashboard.createProduct') ? 'active' : '' }}" href="{{ route('dashboard.createProduct') }}">
+							<span class="menu-icon">
+								<i class="ki-duotone ki-element-plus fs-3"><span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span><span class="path5"></span></i>
+							</span>
+							<span class="menu-title">CREATE NEW PRODUCT</span>
+						</a>
+					@endif
 
-							<a class="menu-link {{ request()->routeIs('dashboard.userProfits') ? 'active' : '' }}" href="{{ route('dashboard.userProfits') }}">
-								<span class="menu-icon">
-									<i class="ki-duotone ki-calendar-2 fs-3"><span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span><span class="path5"></span></i>
-								</span>
-								<span class="menu-title">USER PROFITS</span>
-							</a>
-
-							<a class="menu-link {{ request()->routeIs('dashboard.createProduct') ? 'active' : '' }}" href="{{ route('dashboard.createProduct') }}">
-								<span class="menu-icon">
-									<i class="ki-duotone ki-element-plus fs-3"><span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span><span class="path5"></span></i>
-								</span>
-								<span class="menu-title">CREATE NEW PRODUCT</span>
-							</a>
-						@endif
-
-						@if($role === 'Client')
-							<a class="menu-link {{ request()->routeIs('dashboard.client') ? 'active' : '' }}" href="{{ route('dashboard.client') }}">
-								<span class="menu-icon">
-									<i class="ki-duotone ki-chart-simple-2 fs-3"><span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span></i>
-								</span>
-								<span class="menu-title">CLIENT DASHBOARD</span>
-							</a>
-						@endif
-						<!--end:Menu link-->
-					</div>
-					<!--end:Menu item-->
+					@if($role === 'Client')
+						<a class="menu-link {{ request()->routeIs('dashboard.client') ? 'active' : '' }}" href="{{ route('dashboard.client') }}">
+							<span class="menu-icon">
+								<i class="ki-duotone ki-chart-simple-2 fs-3"><span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span></i>
+							</span>
+							<span class="menu-title">CLIENT DASHBOARD</span>
+						</a>
+					@endif
+					<!--end:Menu link-->
 				</div>
-				<!--end:Menu sub-->
+				<!--end:Menu item-->
 			</div>
 			<!--end:Menu item-->
 			<!--begin:Menu item-->

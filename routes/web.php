@@ -36,11 +36,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/dashboard/createProduct', [DashboardController::class, 'showProductForm'])->name('dashboard.createProduct');
     Route::post('/dashboard/createProduct', [DashboardController::class, 'createProduct'])->name('dashboard.createProduct.post');
 
-    // Route::get('/user-management1/getusers/{id}', [UserManagementController::class, 'getUser']);
-    // Route::get('/user-management1/getusers/{id}', [
-    //     UserManagementController::class,
-    //     'getUser'
-    // ])->name('getUser');
     Route::name('user-management.')->group(function () {
         Route::resource('/user-management/users', UserManagementController::class);
         Route::post('/user-management/users/store', [UserManagementController::class, 'store'])->name('user-management.users.store');

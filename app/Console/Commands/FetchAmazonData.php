@@ -27,6 +27,6 @@ class FetchAmazonData extends Command
     public function handle(): void
     {
         $dashboardController = new DashboardController();
-        $dashboardController->order();
+        $dashboardController->orders();
     }
 }
