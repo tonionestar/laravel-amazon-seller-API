@@ -4,6 +4,11 @@ namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 use app\Http\Controllers\DashboardController;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
+use App\Models\Order;
+use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 
 class FetchAmazonData extends Command
 {

@@ -1,6 +1,6 @@
 @php
     $currentMonthOverallProfits = App\Models\Order::whereMonth('order_date', now()->month)->sum('profit');
-    $currentMonthProductRollover = $currentMonthOverallProfits * 0.2;
+    $currentMonthProductRollover = round($currentMonthOverallProfits * 0.2, 2);
 @endphp
 
 <div class="card card-theme h-md-50 mb-5 mb-xl-10" style="background-color: #0d6efd;background-image:url('assets/media/patterns/vector-1.png')">
