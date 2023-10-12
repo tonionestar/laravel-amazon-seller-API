@@ -26,35 +26,42 @@
 							<span class="menu-icon">
 								<i class="ki-duotone ki-chart-simple-2 fs-3"><span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span></i>
 							</span>
-							<span class="menu-title">ADMIN DASHBOARD</span>
+							<span class="menu-title">Admin Dashboard</span>
 						</a>
 						<a class="menu-link {{ request()->routeIs('dashboard.orders') ? 'active' : '' }}" href="{{ route('dashboard.orders') }}">
 							<span class="menu-icon">
 								<i class="ki-duotone ki-abstract-41 fs-3"><span class="path1"></span><span class="path2"></span></i>
 							</span>
-							<span class="menu-title">ORDERS</span>
+							<span class="menu-title">Orders</span>
 						</a>
 
 						<a class="menu-link {{ request()->routeIs('dashboard.purchases') ? 'active' : '' }}" href="{{ route('dashboard.purchases') }}">
 							<span class="menu-icon">
 								<i class="ki-duotone ki-abstract-25 fs-3"><span class="path1"></span><span class="path2"></span></i>
 							</span>
-							<span class="menu-title">PURCHASES</span>
+							<span class="menu-title">Purchases</span>
 						</a>
 
 						<a class="menu-link {{ request()->routeIs('dashboard.userProfits') ? 'active' : '' }}" href="{{ route('dashboard.userProfits') }}">
 							<span class="menu-icon">
 								<i class="ki-duotone ki-calendar-2 fs-3"><span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span><span class="path5"></span></i>
 							</span>
-							<span class="menu-title">USER PROFITS</span>
+							<span class="menu-title">User Profits</span>
 						</a>
 
 						<a class="menu-link {{ request()->routeIs('dashboard.createProduct') ? 'active' : '' }}" href="{{ route('dashboard.createProduct') }}">
 							<span class="menu-icon">
 								<i class="ki-duotone ki-element-plus fs-3"><span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span><span class="path5"></span></i>
 							</span>
-							<span class="menu-title">CREATE NEW PRODUCT</span>
+							<span class="menu-title">Create New Product</span>
 						</a>
+
+						<a class="menu-link {{ request()->routeIs('dashboard.addPost') ? 'active' : '' }}" href="{{ route('dashboard.addPost') }}">
+						<span class="menu-icon">
+							<i class="ki-duotone ki-abstract-38 fs-3"><span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span><span class="path5"></span></i>
+						</span>
+						<span class="menu-title">Add Post</span>
+					</a>
 					@endif
 
 					@if($role === 'Client')
@@ -62,9 +69,16 @@
 							<span class="menu-icon">
 								<i class="ki-duotone ki-chart-simple-2 fs-3"><span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span></i>
 							</span>
-							<span class="menu-title">CLIENT DASHBOARD</span>
+							<span class="menu-title">Client Dashboard</span>
 						</a>
 					@endif
+
+					<a class="menu-link {{ request()->routeIs('dashboard.allPosts') ? 'active' : '' }}" href="{{ route('dashboard.allPosts') }}">
+						<span class="menu-icon">
+							<i class="ki-duotone ki-map fs-3"><span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span><span class="path5"></span></i>
+						</span>
+						<span class="menu-title">News and Updates</span>
+					</a>
 					<!--end:Menu link-->
 				</div>
 				<!--end:Menu item-->

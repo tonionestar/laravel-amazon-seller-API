@@ -8,6 +8,18 @@
         {{ Breadcrumbs::render('dashboard') }}
     @endsection
 
+    <style>
+        .post-image {
+            width: 100%;
+            height: auto;
+            object-fit: cover; /* This maintains the aspect ratio and avoids image distortion */
+        }
+
+        .post-content {
+            margin-top: 10px; /* Adjust the margin value as needed */
+        }
+    </style>
+
     <div class="row g-5 g-xl-10 mb-5 mb-xl-10">
         <!--begin::Col-->
         <div class="col-md-6 col-lg-6 col-xl-6 col-xxl-4 mb-md-5 mb-xl-10">
@@ -90,4 +102,22 @@
         </div>
         <!--end::Col-->
     </div>
+
+    <div class="row">
+        <!--begin::Col-->
+        @foreach($posts as $post)
+            <div class="col-xl-4">
+                <div class="card">
+                    <div class="card-body">
+                        <a href="{{ route('dashboard.allPosts') }}">
+                            <img src="{{ $post->image }}" alt="" class="rounded-3 mb-5 post-image" >
+                            <span class="fw-bold text-gray-800 fs-3 fs-xl-1">{{ $post->headline }}</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        @endforeach
+        <!--end::Col-->
+    </div>
+
 </x-default-layout>

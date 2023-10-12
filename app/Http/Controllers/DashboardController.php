@@ -8,10 +8,12 @@ use Illuminate\Support\Arr;
 use App\Models\Order;
 use App\Models\UserProfit;
 use App\Models\User;
+use App\Models\Post;
 use App\Models\Purchase;
 use App\Models\ProfitList;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class DashboardController extends Controller
 {
@@ -124,9 +126,11 @@ class DashboardController extends Controller
             $profitList = ProfitList::where('user_id', $user_id)->get();
         }
 
+        $posts = Post::latest()->limit(6)->get();
+
         addVendors(['amcharts', 'amcharts-maps', 'amcharts-stock']);
 
-        return view('pages.dashboards.client', compact('client', 'profitList'));
+        return view('pages.dashboards.client', compact('client', 'profitList', 'posts'));
     }
 
     public function userProfits()
@@ -414,6 +418,42 @@ class DashboardController extends Controller
         session()->flash('success', 'Data stored successfully!');
 
         return redirect()->route('dashboard.createProduct');
+    }
+
+    public function showAddPost()
+    {
+        return view('pages.dashboards.addPost');
+    }
+
+    public function allPosts()
+    {
+        $posts = Post::orderBy('created_at', 'desc')->get();
+        return view('pages.dashboards.allPosts', compact('posts'));
+    }
+
+    public function addPost(Request $request)
+    {
+        // Validate the form input fields
+        $validatedData = $request->validate([
+            'headline' => 'required',
+            'category' => 'required',
+            'content' => 'required',
+            'image' => 'required|image',
+        ]);
+
+        // Store the image file in the local assets folder
+        $imagePath = $request->file('image')->store('assets', 'public');
+
+        // Create a new post record
+        $post = new Post;
+        $post->headline = $validatedData['headline'];
+        $post->category = $validatedData['category'];
+        $post->content = $validatedData['content'];
+        $post->image = Storage::url($imagePath);
+        $post->save();
+
+        // Redirect or perform any other actions you need
+        return redirect()->route('dashboard.addPost');
     }
 
     public function getOrderData()
