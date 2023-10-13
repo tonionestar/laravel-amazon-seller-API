@@ -182,67 +182,66 @@ class DashboardController extends Controller
         $accessToken = $response->json()['access_token'];
 
         // get ReportID and DocumentId
-        $response = Http::withHeaders([
-            'x-amz-access-token' => $accessToken
-        ])->get('https://sellingpartnerapi-na.amazon.com/reports/2021-06-30/reports', [
-            'MarketplaceIds' => env('MARKET_PLACE_ID'),
-            'reportTypes' => 'GET_V2_SETTLEMENT_REPORT_DATA_XML'
-        ]);
+        // $response = Http::withHeaders([
+        //     'x-amz-access-token' => $accessToken
+        // ])->get('https://sellingpartnerapi-na.amazon.com/reports/2021-06-30/reports', [
+        //     'MarketplaceIds' => env('MARKET_PLACE_ID'),
+        //     'reportTypes' => 'GET_V2_SETTLEMENT_REPORT_DATA_XML'
+        // ]);
 
-        $reports = $response->json();
-        $documentIds = Arr::pluck($reports['reports'], 'reportDocumentId');
+        // $reports = $response->json();
+        // $documentIds = Arr::pluck($reports['reports'], 'reportDocumentId');
 
-        // get Reports Url
-        $reports_urls = [];
+        // // get Reports Url
+        // $reports_urls = [];
 
-        foreach ($documentIds as $item) {
-            $response = Http::withHeaders([
-                'x-amz-access-token' => $accessToken
-            ])->get("https://sellingpartnerapi-na.amazon.com/reports/2021-06-30/documents/{$item}");
+        // foreach ($documentIds as $item) {
+        //     $response = Http::withHeaders([
+        //         'x-amz-access-token' => $accessToken
+        //     ])->get("https://sellingpartnerapi-na.amazon.com/reports/2021-06-30/documents/{$item}");
 
-            $reports_url = $response->json();
-            $reports_urls[] = $reports_url;
-        }
+        //     $reports_url = $response->json();
+        //     $reports_urls[] = $reports_url;
+        // }
 
-        // get Reports Data
-        $reports_data = [];
+        // // get Reports Data
+        // $reports_data = [];
 
-        foreach ($reports_urls as $item) {
-            if (!isset($item['url'])) {
-                continue;
-            }
+        // foreach ($reports_urls as $item) {
+        //     if (!isset($item['url'])) {
+        //         continue;
+        //     }
 
-            $url = $item['url'];
-            $response = Http::get($url);
+        //     $url = $item['url'];
+        //     $response = Http::get($url);
 
-            $body = $response->body();
+        //     $body = $response->body();
 
-            // If the response is XML, you can decide how to handle it.
-            // For instance, you might want to convert it to an array or a JSON string:
-            $xml = simplexml_load_string($body);
-            $json = json_encode($xml);
-            $array = json_decode($json, TRUE);
+        //     // If the response is XML, you can decide how to handle it.
+        //     // For instance, you might want to convert it to an array or a JSON string:
+        //     $xml = simplexml_load_string($body);
+        //     $json = json_encode($xml);
+        //     $array = json_decode($json, TRUE);
 
-            $reports_data[] = $array;
+        //     $reports_data[] = $array;
 
-            // get Shipping fee
-            $data = $reports_data; // assign your data to $data variable
-            $shippingServices = [];
+        //     // get Shipping fee
+        //     $data = $reports_data; // assign your data to $data variable
+        //     $shippingServices = [];
 
-            foreach ($data as $item) {
-                if (isset($item['Message']['SettlementReport']['OtherTransaction'])) {
-                    foreach ($item['Message']['SettlementReport']['OtherTransaction'] as $transaction) {
-                        if ($transaction['TransactionType'] == 'ShippingServices') {
-                            $shippingServices[] = [
-                                'AmazonOrderID' => $transaction['AmazonOrderID'],
-                                'Amount' => $transaction['Amount']
-                            ];
-                        }
-                    }
-                }
-            }
-        }
-        // dd($shippingServices);
+        //     foreach ($data as $item) {
+        //         if (isset($item['Message']['SettlementReport']['OtherTransaction'])) {
+        //             foreach ($item['Message']['SettlementReport']['OtherTransaction'] as $transaction) {
+        //                 if ($transaction['TransactionType'] == 'ShippingServices') {
+        //                     $shippingServices[] = [
+        //                         'AmazonOrderID' => $transaction['AmazonOrderID'],
+        //                         'Amount' => $transaction['Amount']
+        //                     ];
+        //                 }
+        //             }
+        //         }
+        //     }
+        // }
 
         // get OrderID
         $response = Http::withHeaders([
@@ -263,16 +262,16 @@ class DashboardController extends Controller
                 $order_array[] = $item;
                 $order_id = $item['AmazonOrderId'];
 
-                $matchedShippingService = array_filter($shippingServices, function ($shippingService) use ($order_id) {
-                    return $shippingService["AmazonOrderID"] == $order_id;
-                });
+                // $matchedShippingService = array_filter($shippingServices, function ($shippingService) use ($order_id) {
+                //     return $shippingService["AmazonOrderID"] == $order_id;
+                // });
 
-                if (!empty($matchedShippingService)) {
-                    $amountKey = array_key_first($matchedShippingService); // Get the first key
-                    $shipping_fee = abs($matchedShippingService[$amountKey]['Amount']); // Use the first key to get the absolute Amount
-                } else {
-                    $shipping_fee = 0;
-                }
+                // if (!empty($matchedShippingService)) {
+                //     $amountKey = array_key_first($matchedShippingService); // Get the first key
+                //     $shipping_fee = abs($matchedShippingService[$amountKey]['Amount']); // Use the first key to get the absolute Amount
+                // } else {
+                //     $shipping_fee = 0;
+                // }
 
                 $shipping_carrier = isset($item['AutomatedShippingSettings']['AutomatedCarrierName']) ? $item['AutomatedShippingSettings']['AutomatedCarrierName'] : '';
 
@@ -331,7 +330,7 @@ class DashboardController extends Controller
                         $referralFeeAmount = 0;
                     }
 
-                    $profit = $item_total - $referralFeeAmount - $shipping_fee;
+                    $profit = $item_total - $referralFeeAmount;
 
                     // // Cost Per Unit from Purchase
                     // $cost_per_unit = $this->getCostPerUnit($order_item['ASIN']);
@@ -352,7 +351,7 @@ class DashboardController extends Controller
                             'item_price' => $item_price,
                             'item_total' => $item_total,
                             'amazon_fee' => $referralFeeAmount,
-                            'shipping_fee' => $shipping_fee,
+                            // 'shipping_fee' => $shipping_fee,
                             'warehouse_fee' => $order_item['QuantityOrdered'],
                             'profit' => $profit,
                             // 'cost_per_unit' => $cost_per_unit
@@ -387,6 +386,7 @@ class DashboardController extends Controller
             'amazon_link' => 'required|url',
             'asin' => 'required|string|max:255',
             'total_purchased_units' => 'required|numeric|min:1',
+            'shipping_fee' => 'required|numeric',
             'cost_per_unit' => 'required|numeric',
         ]);
 
@@ -395,9 +395,11 @@ class DashboardController extends Controller
             'amazon_link' => $request->amazon_link,
             'asin' => $request->asin,
             'total_purchased_units' => $request->total_purchased_units,
+            'shipping_fee' => $request->shipping_fee,
             'cost_per_unit' => $request->cost_per_unit,
         ]);
 
+        $shipping_fee = $request->shipping_fee;
         $cost_per_unit = $request->cost_per_unit;
 
         // Get all orders that match the given 'asin'
@@ -412,6 +414,7 @@ class DashboardController extends Controller
             // updating 'cost_per_unit' and 'total_cost' fields in orders table
             $order->update([
                 'cost_per_unit' => $cog,
+                'shipping_fee' => $shipping_fee
             ]);
         }
 

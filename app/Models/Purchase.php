@@ -22,6 +22,7 @@ class Purchase extends Model
         'amazon_link',
         'asin',
         'total_purchased_units',
+        'shipping_fee',
         'cost_per_unit',
     ];
 }

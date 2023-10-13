@@ -51,6 +51,11 @@
                     <input type="number" placeholder="10.35" name="cost_per_unit" step="0.01" autocomplete="off" class="form-control bg-transparent" value="" required/>
                 </div>
 
+                <div class="fv-row mb-3">
+                    <label class="mb-2 required form-label">Estimated Shipping Fee</label>
+                    <input type="number" placeholder="5.35" name="shipping_fee" step="0.01" autocomplete="off" class="form-control bg-transparent" value="" required/>
+                </div>
+
                 <!--begin::Submit button-->
                 <div class="d-grid mb-10">
                     <button type="submit" id="kt_sign_in_submit" class="btn btn-primary">

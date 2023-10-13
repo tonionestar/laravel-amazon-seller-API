@@ -50,6 +50,7 @@
                                     <th class="p-0 pb-3 min-w-150px text-center">ASIN</th>
                                     <th class="p-0 pb-3 min-w-150px text-center">TOTAL UNITS</th>
                                     <th class="p-0 pb-3 min-w-150px text-center">COST PER UNIT</th>
+                                    <th class="p-0 pb-3 min-w-150px text-center">ESTIMATED SHIPPING FEE</th>
                                 </tr>
                             </thead>
                             <!--end::Table head-->
@@ -79,6 +80,11 @@
                                         <td>
                                             <div class="d-flex justify-content-start flex-column text-center">
                                                 <div class="text-gray-600 fw-bold fs-6">{{ $purchase->cost_per_unit }}</div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="d-flex justify-content-start flex-column text-center">
+                                                <div class="text-gray-600 fw-bold fs-6">{{ $purchase->shipping_fee }}</div>
                                             </div>
                                         </td>
                                     </tr>

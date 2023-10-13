@@ -21,7 +21,7 @@
         }
     </style>
 
-   <div class="row">
+    <div class="row">
         <!--begin::Col-->
         @foreach($posts as $post)
             <div class="col-xl-3">

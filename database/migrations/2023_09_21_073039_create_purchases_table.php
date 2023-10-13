@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('amazon_link');
             $table->string('asin');
             $table->integer('total_purchased_units');
+            $table->float('shipping_fee', 8, 2);
             $table->float('cost_per_unit', 8, 2);
             $table->timestamps();
         });
