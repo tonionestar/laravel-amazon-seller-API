@@ -1,9 +1,24 @@
 @php
     use App\Models\Order;
     use App\Models\User;
+    use App\Models\ShippingFee;
 
     $numberOfClients = User::where('role', 'Client')->count();
     $totalPositions = User::where('role', 'Client')->sum('position');
+    $totalSales = Order::count();
+    $totalCog = Order::sum('cost_per_unit');
+    $totalAmazonFee = Order::sum('amazon_fee');
+    $totalWarehouseFee = Order::sum('warehouse_fee');
+    $totalShippingFee = Order::sum('shipping_fee');
+    $actualShippingFee = ShippingFee::sum('shipping_fee');
+    $shippingDifference = $totalShippingFee - $actualShippingFee;
+    $totalProfits = Order::sum('profit') + $shippingDifference;
+    $actualProfitPerPosition = round($totalProfits / $totalPositions, 2);
+
+    $productFundTotal = round( $totalProfits * 0.2, 2);
+    $companyFee = round( $totalProfits * 0.1, 2);
+
+    $clients = User::where('role', 'Client')->get();
     
 @endphp
 
@@ -144,9 +159,104 @@
         function createPrintableReport() {
             // Create the printable report content
             const printableReport = `
-                <h3>Report For: MONTH YEAR ENTERED ON REPORT GENERATION FORM</h3>
-                <h3>Total Number of Clients:</h3> <span style="display: inline;">{{ $numberOfClients }}</span>
-                <h3>Total Positions:</h3> <span style="display: inline;">{{ $totalPositions }}</span>
+                <div>
+                    <h3>Report For: MONTH YEAR ENTERED ON REPORT GENERATION FORM</h3>
+                </div>
+                
+                <div>
+                    <div>
+                        <h3 style="display: inline;">Total Number of Clients:</h3> <span style="display: inline;">{{ $numberOfClients }}</span>
+                    </div>
+                    <div>
+                        <h3 style="display: inline;">Total Positions:</h3> <span style="display: inline;">{{ $totalPositions }}</span>
+                    </div>
+                    <div>
+                        <h3 style="display: inline;">Total Sales:</h3> <span style="display: inline;">{{ $totalSales }}</span>
+                    </div>
+                    <div>
+                        <h3 style="display: inline;">Total Cost Of Goods:</h3> <span style="display: inline;">{{ $totalCog }}</span>
+                    </div>
+                    <div>
+                        <h3 style="display: inline;">Total Amazon Fees:</h3> <span style="display: inline;">{{ $totalAmazonFee }}</span>
+                    </div>
+                    <div>
+                        <h3 style="display: inline;">Total Warehouse Fees:</h3> <span style="display: inline;">{{ $totalWarehouseFee }}</span>
+                    </div>
+                    <div>
+                        <h3 style="display: inline;">Total Estimated Shipping Fees:</h3> <span style="display: inline;">{{ $totalShippingFee }}</span>
+                    </div>
+                    <div>
+                        <h3 style="display: inline;">Total Actual Shipping Fees:</h3> <span style="display: inline;">{{ $actualShippingFee }}</span>
+                    </div>
+                    <div>
+                        <h3 style="display: inline;">Shipping Difference:</h3> <span style="display: inline;">{{ $shippingDifference }}</span>
+                    </div>
+                    <div>
+                        <h3 style="display: inline;">Total Profits:</h3> <span style="display: inline;">{{ $totalProfits }}</span>
+                    </div>
+                    <div>
+                        <h3 style="display: inline;">Actual Profit Per Position:</h3> <span style="display: inline;">{{ $actualProfitPerPosition }}</span>
+                    </div>
+                </div>
+
+                <div style="margin-top: 30px;">
+                    <div style="font-style: italic"><h3 style="display: inline;">Payout Breakdown</h3></div>
+                    <div>
+                        <h3 style="display: inline;">Product Fund Rollover Total:</h3> <span style="display: inline;">{{ $productFundTotal }}</span>
+                    </div>
+                    <div>
+                        <h3 style="display: inline;">Company Fee:</h3> <span style="display: inline;">{{ $companyFee }}</span>
+                    </div>
+                </div>
+
+                <div style="margin-top: 30px;">
+                    <div style="font-style: italic"><h3 style="display: inline;">Client Payout Table</h3></div>
+                    <div class="card-body pt-6">
+                    <!--begin::Table container-->
+                    <div class="table-responsive">
+                        <!--begin::Table-->
+                        <table class="table table-row-dashed align-middle gs-0 gy-3 my-0">
+                            <!--begin::Table head-->
+                            <thead>
+                                <tr class="fs-6 fw-bold text-gray-500 border-bottom-0">
+                                    <th style="padding: 0 30px 0 0">Client Name</th>
+                                    <th style="padding: 0 30px 0 0">Positions</th>
+                                    <th style="padding: 0 30px 0 0">Profit Per Position</th>
+                                    <th style="padding: 0 30px 0 0">Total Payout</th>
+                                </tr>
+                            </thead>
+                            <!--end::Table head-->
+                            <!--begin::Table body-->
+                            <tbody>
+                                @foreach($clients as $client)
+                                    @php
+                                        $position = $client->position;
+                                        $profitPerPosition = round($actualProfitPerPosition / $totalPositions, 2);
+                                        $totalPayout = $profitPerPosition * $position;
+                                    @endphp
+                                    <tr>
+                                        <td>
+                                            <!--begin::Label-->
+                                            <span class="text-gray-600 fw-bold fs-6">{{ $client->full_name }}</span>
+                                            <!--end::Label-->
+                                        </td>
+                                        <td>
+                                            <span class="text-gray-600 fw-bold fs-6">{{ $position }}</span>
+                                        </td>
+                                        <td>
+                                            <span class="text-gray-600 fw-bold fs-6">{{ $profitPerPosition }}</span>
+                                        </td>
+                                        <td>
+                                            <span class="text-gray-600 fw-bold fs-6">{{ $totalPayout }}</span>
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                            <!--end::Table body-->
+                        </table>
+                    </div>
+                    <!--end::Table-->
+                </div>
                 
 
                 <!-- Add your desired styling for the printable report -->
