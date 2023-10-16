@@ -35,6 +35,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/dashboard/userProfits', [DashboardController::class, 'userProfits'])->name('dashboard.userProfits');
     Route::get('/dashboard/createProduct', [DashboardController::class, 'showProductForm'])->name('dashboard.createProduct');
     Route::post('/dashboard/createProduct', [DashboardController::class, 'createProduct'])->name('dashboard.createProduct.post');
+    Route::get('/dashboard/monthlyReports', [DashboardController::class, 'showMonthlyReports'])->name('dashboard.monthlyReports');
+    Route::post('/dashboard/shippingFee', [DashboardController::class, 'shippingFee'])->name('dashboard.monthlyReports.post');
     Route::get('/dashboard/addPost', [DashboardController::class, 'showAddPost'])->name('dashboard.addPost');
     Route::post('/dashboard/addPost', [DashboardController::class, 'addPost'])->name('dashboard.addPost.post');
     Route::get('/dashboard/allPosts', [DashboardController::class, 'allPosts'])->name('dashboard.allPosts');

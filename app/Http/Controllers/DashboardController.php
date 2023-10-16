@@ -9,6 +9,7 @@ use App\Models\Order;
 use App\Models\UserProfit;
 use App\Models\User;
 use App\Models\Post;
+use App\Models\ShippingFee;
 use App\Models\Purchase;
 use App\Models\ProfitList;
 use Carbon\Carbon;
@@ -421,6 +422,36 @@ class DashboardController extends Controller
         session()->flash('success', 'Data stored successfully!');
 
         return redirect()->route('dashboard.createProduct');
+    }
+
+    public function showMonthlyReports()
+    {
+        $shipping_fees = ShippingFee::paginate(10);
+        return view('pages.dashboards.monthlyReports', compact('shipping_fees'));
+    }
+
+    public function shippingFee(Request $request)
+    {
+        // Validate the form input fields
+        $validatedData = $request->validate([
+            'month_year' => 'required|date',
+            'shipping_fee' => 'required|numeric',
+        ]);
+
+        // Create a new shipping_fee record
+        $shipping_fees = new ShippingFee;
+        $shipping_fees->month_year = $validatedData['month_year'];
+        $shipping_fees->shipping_fee = $validatedData['shipping_fee'];
+        $shipping_fees->save();
+
+        // Redirect or perform any other actions you need
+        return redirect()->route('dashboard.monthlyReports');
+    }
+
+    public function monthlyReports()
+    {
+        $shipping_fees = ShippingFee::paginate(10);
+        return view('pages.dashboards.monthlyReports', compact('shipping_fees'));
     }
 
     public function showAddPost()
