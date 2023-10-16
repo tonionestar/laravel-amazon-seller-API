@@ -124,9 +124,15 @@
                                                 <div class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-semibold fs-7 w-125px py-4" data-kt-menu="true">
                                                     <!--begin::Menu item-->
                                                     <div class="menu-item px-3">
-                                                        <a href="{{ route('dashboard.client', ['id' => $user]) }}" class="menu-link px-3">
-                                                            View
-                                                        </a>
+                                                        @if($user->role === 'Client')
+                                                            <a href="{{ route('dashboard.client', ['id' => $user]) }}" class="menu-link px-3">
+                                                                View
+                                                            </a>
+                                                        @else
+                                                            <a href="{{ route('dashboard.admin') }}" class="menu-link px-3">
+                                                                View
+                                                            </a>
+                                                        @endif
                                                     </div>
                                                     <!--end::Menu item-->
 
@@ -135,7 +141,9 @@
                                                         {{-- <a href="#" class="menu-link px-3" data-kt-user-id="{{ $user->id }}" data-bs-toggle="modal" data-bs-target="#kt_modal_edit_user" data-kt-action="update_row">
                                                             Edit
                                                         </a> --}}
-                                                        <a href="javascript:void(0)" class="menu-link px-3" data-kt-user-id="{{ $user->id }}" onclick="openEditModal()" id="editButton" data-bs-toggle="modal" data-bs-target="#kt_modal_add_user" data-kt-action="update_row">Edit</a>
+                                                        <a href="javascript:void(0)" class="menu-link px-3" data-kt-user-id="{{ $user->id }}" onclick="openEditModal()" id="editButton" data-bs-toggle="modal" data-bs-target="#kt_modal_add_user" data-kt-action="update_row">
+                                                            Edit
+                                                        </a>
                                                     </div>
                                                     <!--end::Menu item-->
 
