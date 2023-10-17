@@ -37,20 +37,22 @@
         <div class="row">
             <form action="{{ route('dashboard.monthlyReports.post') }}" method="post">
                 @csrf
-                <div class="col-xl-4 mb-3">
-                    <label class="mb-2 required form-label">Select Month and Year</label>
-                    <input type="month" placeholder="01/2000" name="month_year" autocomplete="off" class="form-control bg-transparent" value="" id="month_year" required/>
-                </div>
-
-                <div class="col-xl-4 mb-3">
-                    <label class="mb-2 required form-label">Actual Shipping Fees</label>
-                    <input type="number" placeholder="105.55" name="shipping_fee" step="0.01" autocomplete="off" class="form-control bg-transparent" value="" required/>
-                </div>
-
-                <div class="col-xl-4 mb-3">
-                    <button type="submit" id="kt_sign_in_submit" class="btn btn-primary">
-                        @include('partials/general/_button-indicator', ['label' => 'Generate Report'])
-                    </button>
+                <div class="colume">
+                    <div class="col-md-4 mb-3">
+                        <label class="mb-2 required form-label" for="month_year">Select Month and Year</label>
+                        <input type="month" placeholder="January 2000" name="month_year" autocomplete="off" class="form-control bg-transparent" id="month_year" required/>
+                    </div>
+            
+                    <div class="col-md-4 mb-3">
+                        <label class="mb-2 required form-label" for="shipping_fee">Actual Shipping Fees</label>
+                        <input type="number" placeholder="105.55" name="shipping_fee" step="0.01" autocomplete="off" class="form-control bg-transparent" id="shipping_fee" required/>
+                    </div>
+            
+                    <div class="col-md-4 mb-3">
+                        <button type="submit" id="kt_sign_in_submit" class="btn btn-primary">
+                            @include('partials/general/_button-indicator', ['label' => 'Generate Report'])
+                        </button>
+                    </div>
                 </div>
             </form>
         </div>
