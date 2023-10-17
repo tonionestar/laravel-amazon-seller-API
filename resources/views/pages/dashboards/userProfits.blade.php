@@ -8,6 +8,8 @@
         {{-- {{ Breadcrumbs::render('dashboard') }} --}}
     @endsection
 
+    <link rel="stylesheet" href="{{ asset('assets/css/custom.css') }}" />
+
         <div>
         <!--begin::Col-->
         <div class="col-xl-12">

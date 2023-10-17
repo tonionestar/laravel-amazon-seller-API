@@ -33,6 +33,8 @@
         {{-- {{ Breadcrumbs::render('dashboard') }} --}}
     @endsection
 
+    <link rel="stylesheet" href="{{ asset('assets/css/custom.css') }}" />
+
     <div>
         <div class="row">
             <form action="{{ route('dashboard.monthlyReports.post') }}" method="post">

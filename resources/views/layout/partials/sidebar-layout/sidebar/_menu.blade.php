@@ -78,6 +78,12 @@
 							</span>
 							<span class="menu-title">Client Dashboard</span>
 						</a>
+						<a class="menu-link {{ request()->routeIs('dashboard.orders') ? 'active' : '' }}" href="{{ route('dashboard.orders') }}">
+							<span class="menu-icon">
+								<i class="ki-duotone ki-abstract-41 fs-3"><span class="path1"></span><span class="path2"></span></i>
+							</span>
+							<span class="menu-title">Orders</span>
+						</a>
 					@endif
 
 					<a class="menu-link {{ request()->routeIs('dashboard.allPosts') ? 'active' : '' }}" href="{{ route('dashboard.allPosts') }}">

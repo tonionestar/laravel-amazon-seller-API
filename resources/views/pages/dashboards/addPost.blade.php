@@ -8,6 +8,8 @@
     @section('breadcrumbs')
         {{-- {{ Breadcrumbs::render('dashboard') }} --}}
     @endsection
+    
+    <link rel="stylesheet" href="{{ asset('assets/css/custom.css') }}" />
 
     <div>
         <!--begin::Col-->

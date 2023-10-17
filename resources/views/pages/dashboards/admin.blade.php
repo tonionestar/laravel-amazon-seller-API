@@ -57,6 +57,8 @@ use Carbon\Carbon;
         {{-- {{ Breadcrumbs::render('dashboard') }} --}}
     @endsection
 
+    <link rel="stylesheet" href="{{ asset('assets/css/custom.css') }}" />
+
     <span id="chart_d" data-value='<?php echo json_encode($chart_d); ?>'></span>
     <span id="chart_w" data-value='<?php echo json_encode($chart_w); ?>'></span>
     <span id="chart_m" data-value='<?php echo json_encode($chart_m); ?>'></span>

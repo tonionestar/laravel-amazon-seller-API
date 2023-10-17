@@ -8,6 +8,8 @@
         {{-- {{ Breadcrumbs::render('user-management.users.index') }} --}}
     @endsection
 
+    <link rel="stylesheet" href="{{ asset('assets/css/custom.css') }}" />
+
     @if(session()->has('success'))
         <div class="alert alert-success">
             {{ session()->get('success') }}
