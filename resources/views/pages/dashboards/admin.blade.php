@@ -54,7 +54,7 @@ use Carbon\Carbon;
     @endsection
 
     @section('breadcrumbs')
-        {{ Breadcrumbs::render('dashboard') }}
+        {{-- {{ Breadcrumbs::render('dashboard') }} --}}
     @endsection
 
     <span id="chart_d" data-value='<?php echo json_encode($chart_d); ?>'></span>

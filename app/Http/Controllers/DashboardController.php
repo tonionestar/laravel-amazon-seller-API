@@ -15,6 +15,7 @@ use App\Models\ProfitList;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Log;
 
 class DashboardController extends Controller
 {
@@ -490,22 +491,50 @@ class DashboardController extends Controller
         return redirect()->route('dashboard.addPost');
     }
 
-    public function getOrderData()
+    public function getOrderData(Request $request)
     {
-        // Fetch all data from the Order model
-        $orders = Order::all();
-        foreach ($orders as $order) {
-            // Subtract 'cost_per_unit' from 'profit'
-            $profit = $order->item_total - $order->warehouse_fee - $order->amazon_fee - $order->shipping_fee - $order->cost_per_unit;
+        $query = Order::query();
 
-            // Update the 'profit' field in the Order model
-            $order->update([
-                'profit' => $profit,
-            ]);
+        // Retrieve the query parameters
+        $queryParams = $request->except('page');
+        $dateRequest = '';
+        // Filter orders based on specific date range
+        if ($request->has('date_range')) {
+            $dateRequest = $request->input('date_range');
+            $date_range = explode(' - ', $request->input('date_range'));
+            $startDate = $date_range[0];
+            $endDate = $date_range[1];
+
+            $dateString = $startDate;
+            $startDate = date('Y-m-d', strtotime(str_replace(' / ', '-', $dateString)));
+            $dateString = $endDate;
+            $endDate =  date('Y-m-d', strtotime(str_replace(' / ', '-', $dateString)));
+
+            // Add the date range condition to the query
+            $query->whereBetween('order_date', [$startDate, $endDate]);
         }
-        $orders = Order::paginate(10);
-        addVendors(['amcharts', 'amcharts-maps', 'amcharts-stock']);
 
-        return view('pages.dashboards.orders', ['orders' => $orders]);
+        // Sort orders based on order_date in descending order (most recent first)
+        $sort = $request->input('sort');
+        $direction = $request->input('direction', 'desc'); // Default to descending order
+        if (
+            $sort === 'order_date'
+        ) {
+            $query->orderBy('order_date', $direction);
+        } else {
+            // If no specific sorting is requested, sort by order_date in descending order by default
+            $query->orderBy('order_date', 'desc');
+        }
+
+        // Fetch orders based on the filtered query
+        $orders = $query->paginate(10);
+        // Log::info("Logging query: " . $query);
+
+        // Append the filter parameters to the pagination links
+        $orders->appends($queryParams);
+
+        // Add the vendors
+
+        return view('pages.dashboards.orders', compact('orders', 'dateRequest'));
     }
 }

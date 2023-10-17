@@ -1,11 +1,20 @@
+@php
+    use App\Models\User;
+
+    $user = User::findOrFail(auth()->id());
+    $fullName = $user->full_name;
+    $firstName = explode(" ", $fullName)[0];
+
+@endphp
+
 <x-default-layout>
 
     @section('title')
-        Orders
+        Welcome {{ $firstName }}
     @endsection
 
     @section('breadcrumbs')
-        {{ Breadcrumbs::render('dashboard') }}
+        {{-- {{ Breadcrumbs::render('dashboard') }} --}}
     @endsection
 
     <!--begin::Row-->

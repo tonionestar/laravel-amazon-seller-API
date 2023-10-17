@@ -1,3 +1,5 @@
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+
 <!--begin::Table widget 14-->
 <div class="card card-flush h-md-100">
 	<!--begin::Header-->
@@ -5,18 +7,17 @@
 		<!--begin::Title-->
 		<h3 class="card-title align-items-start flex-column">
 			<span class="card-label fw-bold text-gray-800">ORDERS</span>
-			<span class="text-gray-400 mt-1 fw-semibold fs-6">Updated 37 minutes ago</span>
 		</h3>
-		<!--end::Title-->
-		<!--begin::Toolbar-->
-		<div class="card-toolbar">
-			<a href="#" class="btn btn-sm btn-light">History</a>
-		</div>
-		<!--end::Toolbar-->
+		<div class="mb-0">
+				<form method="GET" action="{{ route('dashboard.orders') }}" id="order_form">
+					<input class="form-control form-control-solid" name="date_range" placeholder="Pick date rage" id="kt_daterangepicker" value="{{$dateRequest}}" />
+				</form>
+			</div>
 	</div>
 	<!--end::Header-->
 	<!--begin::Body-->
 	<div class="card-body pt-6">
+			
 		<!--begin::Table container-->
 		<div class="table-responsive">
 			<!--begin::Table-->
@@ -123,11 +124,11 @@
 				@for ($page = 1; $page <= $orders->lastPage(); $page++)
 					@if ($page == $orders->currentPage())
 						<li class="page-item active">
-							<a class="page-link" href="#">{{ $page }}</a>
+							<a class="page-link" href="{{ $orders->appends(request()->input())->url($page) }}">{{ $page }}</a>
 						</li>
 					@else
 						<li class="page-item">
-							<a class="page-link" href="{{ $orders->url($page) }}">{{ $page }}</a>
+							<a class="page-link" href="{{ $orders->appends(request()->input())->url($page) }}">{{ $page }}</a>
 						</li>
 					@endif
 				@endfor
@@ -148,3 +149,13 @@
 	<!--end: Card Body-->
 </div>
 <!--end::Table widget 14-->
+
+<script>
+	$(function () {
+		$("#kt_daterangepicker").daterangepicker();
+
+		$("#kt_daterangepicker").change(function() {
+			$("#order_form").submit();
+		})
+	})
+</script>
