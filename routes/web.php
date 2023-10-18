@@ -40,6 +40,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/dashboard/shippingFee', [DashboardController::class, 'shippingFee'])->name('dashboard.monthlyReports.post');
     Route::get('/dashboard/addPost', [DashboardController::class, 'showAddPost'])->name('dashboard.addPost');
     Route::post('/dashboard/addPost', [DashboardController::class, 'addPost'])->name('dashboard.addPost.post');
+    Route::get('/dashboard/editPost/{id}', [DashboardController::class, 'showEditPost'])->name('dashboard.editPost');
+    Route::post('/dashboard/editPost/{id}', [DashboardController::class, 'editPost'])->name('dashboard.editPost.post');
+    Route::delete('/dashboard/deletePost/{id}', [DashboardController::class, 'deletePost'])->name('dashboard.deletePost');
     Route::get('/dashboard/allPosts', [DashboardController::class, 'allPosts'])->name('dashboard.allPosts');
 
     Route::name('user-management.')->group(function () {

@@ -1,7 +1,16 @@
+@php
+    use App\Models\User;
+
+    $user = User::findOrFail(auth()->id());
+    $fullName = $user->full_name;
+    $firstName = explode(" ", $fullName)[0];
+
+@endphp
+
 <x-default-layout>
 
     @section('title')
-    Client
+    Welcome {{ $firstName }}
     @endsection
 
     @section('breadcrumbs')

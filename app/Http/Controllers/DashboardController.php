@@ -460,6 +460,12 @@ class DashboardController extends Controller
         return view('pages.dashboards.addPost');
     }
 
+    public function showEditPost($id)
+    {
+        $post = Post::find($id);
+        return view('pages.dashboards.editPost', compact('post'));
+    }
+
     public function allPosts()
     {
         $posts = Post::orderBy('created_at', 'desc')->get();
@@ -489,6 +495,54 @@ class DashboardController extends Controller
 
         // Redirect or perform any other actions you need
         return redirect()->route('dashboard.addPost');
+    }
+
+    public function editPost(Request $request, $id)
+    {
+        // Find the post to be edited
+        $post = Post::findOrFail($id);
+
+        // Validate the form input fields
+        $validatedData = $request->validate([
+            'headline' => 'required',
+            'category' => 'required',
+            'content' => 'required',
+            'image' => 'sometimes|image',
+        ]);
+
+        // Update the post fields if they are modified
+        $post->headline = $validatedData['headline'];
+        $post->category = $validatedData['category'];
+        $post->content = $validatedData['content'];
+
+        // Check if a new image was uploaded
+        if ($request->hasFile('image')) {
+            // Delete the previous image
+            Storage::delete(public_path($post->image));
+
+            // Store the new image in the local assets folder
+            $imagePath = $request->file('image')->store('assets', 'public');
+            $post->image = Storage::url($imagePath);
+        }
+
+        // Save the updated post
+        $post->save();
+
+        return redirect()->route('dashboard.allPosts');
+    }
+
+    public function deletePost($id)
+    {
+        // Find the post to be deleted
+        $post = Post::findOrFail($id);
+
+        // Delete the post image from storage
+        Storage::delete(public_path($post->image));
+
+        // Delete the post record from the database
+        $post->delete();
+
+        return redirect()->route('dashboard.allPosts');
     }
 
     public function getOrderData(Request $request)
