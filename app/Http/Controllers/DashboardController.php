@@ -439,11 +439,26 @@ class DashboardController extends Controller
             'shipping_fee' => 'required|numeric',
         ]);
 
-        // Create a new shipping_fee record
-        $shipping_fees = new ShippingFee;
-        $shipping_fees->month_year = $validatedData['month_year'];
-        $shipping_fees->shipping_fee = $validatedData['shipping_fee'];
-        $shipping_fees->save();
+        // Format the month_year value
+        $formattedMonthYear = Carbon::createFromFormat('Y-m', $validatedData['month_year'])->format('F Y');
+
+        // Find the existing record by month_year
+        $shippingFee = ShippingFee::where(
+            'month_year',
+            $formattedMonthYear
+        )->first();
+
+        if ($shippingFee) {
+            // Update the shipping_fee value
+            $shippingFee->shipping_fee = $validatedData['shipping_fee'];
+            $shippingFee->save();
+        } else {
+            // Create a new shipping_fee record
+            $shippingFee = new ShippingFee;
+            $shippingFee->month_year = $formattedMonthYear;
+            $shippingFee->shipping_fee = $validatedData['shipping_fee'];
+            $shippingFee->save();
+        }
 
         // Redirect or perform any other actions you need
         return redirect()->route('dashboard.monthlyReports');

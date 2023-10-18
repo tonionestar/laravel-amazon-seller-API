@@ -3,6 +3,8 @@
     use App\Models\User;
     use App\Models\ShippingFee;
 
+    $shippingFee = ShippingFee::all(); // Retrieve the shipping_fee record by ID
+
     $numberOfClients = User::where('role', 'Client')->count();
     $totalPositions = User::where('role', 'Client')->sum('position');
     $totalSales = Order::count();
@@ -98,7 +100,7 @@
                                             </span>
                                         </td>
                                         <td class="text-center pe-0">
-                                            <button type="button" class="btn btn-sm btn-success" onclick="createPrintableReport()">View Report</button>
+                                            <button type="button" class="btn btn-sm btn-success" onclick="createPrintableReport('{{ $shipping_fee->month_year }}')">View Report</button>
                                         </td>
                                     </tr>
                                 @endforeach
@@ -160,11 +162,11 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
     <script>
-        function createPrintableReport() {
+        function createPrintableReport(monthYear) {
             // Create the printable report content
             const printableReport = `
                 <div>
-                    <h3>Report For: MONTH YEAR ENTERED ON REPORT GENERATION FORM</h3>
+                    <h3>Report For: ${monthYear} ENTERED ON REPORT GENERATION FORM</h3>
                 </div>
                 
                 <div>
@@ -235,7 +237,7 @@
                                 @foreach($clients as $client)
                                     @php
                                         $position = $client->position;
-                                        $profitPerPosition = round($actualProfitPerPosition / $totalPositions, 2);
+                                        $profitPerPosition = $actualProfitPerPosition;
                                         $totalPayout = $profitPerPosition * $position;
                                     @endphp
                                     <tr>
