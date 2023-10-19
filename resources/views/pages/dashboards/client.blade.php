@@ -52,6 +52,15 @@
         <!--end::Col-->
     </div>
 
+    <div class="row">
+        <div class="col-xxl-6 mb-5 mb-xl-10">
+           @include('partials/widgets/charts/totalSale')
+        </div>
+
+        <div class="col-xxl-6 mb-5 mb-xl-10">
+            @include('partials/widgets/charts/totalUnit')
+        </div>
+    </div>
     <div>
         <!--begin::Col-->
         <div class="col-xl-12">

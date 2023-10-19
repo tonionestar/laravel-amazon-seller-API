@@ -135,6 +135,45 @@ class DashboardController extends Controller
         return view('pages.dashboards.client', compact('client', 'profitList', 'posts'));
     }
 
+    public function fetchOrdersData(Request $request)
+    {
+        // Fetch the orders from the database
+        $orders = Order::select('order_date', 'item_total', 'quantity')->get();
+
+        // Prepare the aggregated data for each date
+        $aggregatedData = [];
+        foreach ($orders as $order) {
+            $date = $order->order_date;
+            $itemTotal = $order->item_total;
+            $quantity = $order->quantity;
+
+            // Combine item_total and quantity for the same date
+            if (!isset($aggregatedData[$date])) {
+                $aggregatedData[$date] = [
+                    'itemTotal' => $itemTotal,
+                    'quantity' => $quantity,
+                ];
+            } else {
+                $aggregatedData[$date]['itemTotal'] += $itemTotal;
+                $aggregatedData[$date]['quantity'] += $quantity;
+            }
+        }
+
+        // Extract the order_dates, item_total, and quantity from the aggregated data
+        $order_dates = array_keys($aggregatedData);
+        $item_total = array_column($aggregatedData, 'itemTotal');
+        $quantity = array_column($aggregatedData, 'quantity');
+
+        // Prepare the response data
+        $data = [
+            'order_dates' => $order_dates,
+            'item_total' => $item_total,
+            'quantity' => $quantity,
+        ];
+
+        return response()->json($data);
+    }
+
     public function userProfits()
     {
         $currentMonthStartDate = now()->startOfMonth();

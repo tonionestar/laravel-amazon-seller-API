@@ -44,6 +44,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/dashboard/editPost/{id}', [DashboardController::class, 'editPost'])->name('dashboard.editPost.post');
     Route::delete('/dashboard/deletePost/{id}', [DashboardController::class, 'deletePost'])->name('dashboard.deletePost');
     Route::get('/dashboard/allPosts', [DashboardController::class, 'allPosts'])->name('dashboard.allPosts');
+    Route::get('/dashboard/fetchOrdersData', [DashboardController::class, 'fetchOrdersData'])->name('fdashboard.fetchOrdersData');
 
     Route::name('user-management.')->group(function () {
         Route::resource('/user-management/users', UserManagementController::class);

@@ -3595,3 +3595,492 @@ if (typeof module !== 'undefined' && typeof module.exports !== 'undefined') {
 KTUtil.onDOMContentLoaded(function() {
     KTWidgets.init();
 });
+
+// Total Sale
+var KTChartsWidget3 = function () {
+    var chart = {
+        self: null,
+        rendered: false
+    };
+
+    // Private methods
+    var initChart = function(chart) {
+        var element = document.getElementById("kt_charts_widget_3");
+
+        if (!element) {
+            return;
+        }
+        
+        var height = parseInt(KTUtil.css(element, 'height'));
+        var labelColor = KTUtil.getCssVariableValue('--bs-gray-500');
+        var borderColor = KTUtil.getCssVariableValue('--bs-border-dashed-color');
+        var baseColor = KTUtil.getCssVariableValue('--bs-success');
+        var lightColor = KTUtil.getCssVariableValue('--bs-success');
+
+        var currentDate = new Date();
+        var currentMonth = currentDate.getMonth() + 1; // Get the current month (Note: January is 0, so we add 1)
+        var currentYear = currentDate.getFullYear(); // Get the current year
+        var daysCount = new Date(currentYear, currentMonth, 0).getDate(); // Get the total number of days in the current month
+
+        var categories = [];
+
+        for (var i = 1; i <= daysCount; i++) {
+            var formattedDate = new Intl.DateTimeFormat('en-US', { month: 'short', day: '2-digit' }).format(new Date(currentYear, currentMonth - 1, i));
+            categories.push(formattedDate);
+        }
+
+        $.ajax({
+            url: '/dashboard/fetchOrdersData',
+            method: 'GET',
+            success: function(response) {
+                // Extract the order_dates and item_total values from the response
+                const order_dates = response.order_dates;
+                const item_total = response.item_total;
+
+                // Convert order_dates to match the format in categories
+                const formatted_order_dates = order_dates.map(date => {
+                    const month = new Date(date).toLocaleString('default', { month: 'short' });
+                    const day = new Date(date).toLocaleString('default', { day: '2-digit' });
+                    return `${month} ${day}`;
+                });
+                
+                // Create a map of order_dates to item_total values for easier lookup
+                const orderDateMap = {};
+                for (let i = 0; i < formatted_order_dates.length; i++) {
+                    orderDateMap[formatted_order_dates[i]] = item_total[i].toFixed(2);
+                }
+
+                // Match the item_total with the categories array
+                const seriesData = [];
+                for (const category of categories) {
+                    if (orderDateMap.hasOwnProperty(category)) {
+                        seriesData.push(orderDateMap[category]);
+                    } else {
+                        seriesData.push(0);
+                    }
+                }
+
+                const series = [{
+                    name: 'Sales',
+                    data: seriesData
+                }];
+                var options = {
+                    series: series,            
+                    chart: {
+                        fontFamily: 'inherit',
+                        type: 'area',
+                        height: height,
+                        toolbar: {
+                            show: false
+                        }
+                    },
+                    plotOptions: {
+        
+                    },
+                    legend: {
+                        show: false
+                    },
+                    dataLabels: {
+                        enabled: false
+                    },
+                    fill: {
+                        type: "gradient",
+                        gradient: {
+                            shadeIntensity: 1,
+                            opacityFrom: 0.4,
+                            opacityTo: 0,
+                            stops: [0, 80, 100]
+                        }
+                    },
+                    stroke: {
+                        curve: 'smooth',
+                        show: true,
+                        width: 3,
+                        colors: [baseColor]
+                    },
+                    xaxis: {
+                        // categories: ['', 'Apr 02', 'Apr 03', 'Apr 04', 'Apr 05', 'Apr 06', 'Apr 07', 'Apr 08', 'Apr 09', 'Apr 10', 'Apr 11', 'Apr 12', 'Apr 13', 'Apr 14', 'Apr 15', 'Apr 16', 'Apr 17', 'Apr 18', ''],
+                        categories: categories,
+                        axisBorder: {
+                            show: false,
+                        },
+                        axisTicks: {
+                            show: false
+                        },
+                        tickAmount: 6,
+                        labels: {
+                            rotate: 0,
+                            rotateAlways: true,
+                            style: {
+                                colors: labelColor,
+                                fontSize: '12px'
+                            }
+                        },
+                        crosshairs: {
+                            position: 'front',
+                            stroke: {
+                                color: baseColor,
+                                width: 1,
+                                dashArray: 3
+                            }
+                        },
+                        tooltip: {
+                            enabled: true,
+                            formatter: undefined,
+                            offsetY: 0,
+                            style: {
+                                fontSize: '12px'
+                            }
+                        }
+                    },
+                    yaxis: {
+                        tickAmount: 5,
+                        max: 300,
+                        min: 0,
+                        labels: {
+                            style: {
+                                colors: labelColor,
+                                fontSize: '12px'
+                            },
+                            formatter: function (val) {
+                                return '$' + val
+                            }
+                        }
+                    },
+                    states: {
+                        normal: {
+                            filter: {
+                                type: 'none',
+                                value: 0
+                            }
+                        },
+                        hover: {
+                            filter: {
+                                type: 'none',
+                                value: 0
+                            }
+                        },
+                        active: {
+                            allowMultipleDataPointsSelection: false,
+                            filter: {
+                                type: 'none',
+                                value: 0
+                            }
+                        }
+                    },
+                    tooltip: {
+                        style: {
+                            fontSize: '12px'
+                        },
+                        y: {
+                            formatter: function (val) {
+                                return "$" + val
+                            }
+                        }
+                    },
+                    colors: [lightColor],
+                    grid: {
+                        borderColor: borderColor,
+                        strokeDashArray: 4,
+                        yaxis: {
+                            lines: {
+                                show: true
+                            }
+                        }
+                    },
+                    markers: {
+                        strokeColor: baseColor,
+                        strokeWidth: 3
+                    }
+                };
+        
+                chart.self = new ApexCharts(element, options);
+                // Set timeout to properly get the parent elements width
+                setTimeout(function() {
+                    chart.self.render();
+                    chart.rendered = true;
+                }, 200);  
+            },
+            error: function(error) {
+                console.error(error);
+            }
+        });
+
+
+    }
+
+    // Public methods
+    return {
+        init: function () {
+            initChart(chart);
+
+            // Update chart on theme mode change
+            KTThemeMode.on("kt.thememode.change", function() {                
+                if (chart.rendered) {
+                    chart.self.destroy();
+                }
+
+                initChart(chart);
+            });
+        }   
+    }
+}();
+
+// Webpack support
+if (typeof module !== 'undefined') {
+    module.exports = KTChartsWidget3;
+}
+
+// On document ready
+KTUtil.onDOMContentLoaded(function() {
+    KTChartsWidget3.init();
+});
+
+// Total Unit
+var KTChartsWidget4 = function () {
+    var chart = {
+        self: null,
+        rendered: false
+    };
+
+    // Private methods
+    var initChart = function() {
+        var element = document.getElementById("kt_charts_widget_4");
+
+        if (!element) {
+            return;
+        }
+        
+        var height = parseInt(KTUtil.css(element, 'height'));
+        var labelColor = KTUtil.getCssVariableValue('--bs-gray-500');
+        var borderColor = KTUtil.getCssVariableValue('--bs-border-dashed-color');
+        var baseColor = KTUtil.getCssVariableValue('--bs-primary');
+        var lightColor = KTUtil.getCssVariableValue('--bs-primary');
+
+        var currentDate = new Date();
+        var currentMonth = currentDate.getMonth() + 1; // Get the current month (Note: January is 0, so we add 1)
+        var currentYear = currentDate.getFullYear(); // Get the current year
+        var daysCount = new Date(currentYear, currentMonth, 0).getDate(); // Get the total number of days in the current month
+
+        var categories = [];
+
+        for (var i = 1; i <= daysCount; i++) {
+            var formattedDate = new Intl.DateTimeFormat('en-US', { month: 'short', day: '2-digit' }).format(new Date(currentYear, currentMonth - 1, i));
+            categories.push(formattedDate);
+        }
+
+        $.ajax({
+            url: '/dashboard/fetchOrdersData',
+            method: 'GET',
+            success: function(response) {
+                // Extract the order_dates and item_total values from the response
+                const order_dates = response.order_dates;
+                const item_total = response.item_total;
+                const quantity = response.quantity;
+
+                // Convert order_dates to match the format in categories
+                const formatted_order_dates = order_dates.map(date => {
+                    const month = new Date(date).toLocaleString('default', { month: 'short' });
+                    const day = new Date(date).toLocaleString('default', { day: '2-digit' });
+                    return `${month} ${day}`;
+                });
+                
+                // Create a map of order_dates to the sum of quantities for easier lookup
+                const orderDateMap = {};
+                for (let i = 0; i < formatted_order_dates.length; i++) {
+                    const date = formatted_order_dates[i];
+                    const itemQuantity  = quantity[i];
+                    if (orderDateMap[date]) {
+                        orderDateMap[date] += itemQuantity ; // Sum the quantities
+                    } else {
+                        orderDateMap[date] = itemQuantity ; // Set the initial itemQuantity 
+                    }
+                }
+
+                // Match the sum of quantities with the categories array
+                const seriesData = [];
+                for (const category of categories) {
+                    if (orderDateMap.hasOwnProperty(category)) {
+                        seriesData.push(orderDateMap[category]);
+                    } else {
+                        seriesData.push(0);
+                    }
+                }
+
+                // Define the series array
+                const series = [{
+                    name: 'Sales',
+                    data: seriesData
+                }];
+
+                var options = {
+                    series: series,
+                    chart: {
+                        fontFamily: 'inherit',
+                        type: 'area',
+                        height: height,
+                        toolbar: {
+                            show: false
+                        }
+                    },
+                    plotOptions: {
+        
+                    },
+                    legend: {
+                        show: false
+                    },
+                    dataLabels: {
+                        enabled: false
+                    },
+                    fill: {
+                        type: "gradient",
+                        gradient: {
+                            shadeIntensity: 1,
+                            opacityFrom: 0.4,
+                            opacityTo: 0,
+                            stops: [0, 80, 100]
+                        }
+                    },
+                    stroke: {
+                        curve: 'smooth',
+                        show: true,
+                        width: 3,
+                        colors: [baseColor]
+                    },
+                    xaxis: {
+                        // categories: ['', 'Apr 02', 'Apr 03', 'Apr 04', 'Apr 05', 'Apr 06', 'Apr 07', 'Apr 08', 'Apr 09', 'Apr 10', 'Apr 11', 'Apr 12', 'Apr 13', 'Apr 14', 'Apr 17', 'Apr 18', 'Apr 19', 'Apr 21', ''],
+                        categories: categories,
+                        axisBorder: {
+                            show: false,
+                        },
+                        axisTicks: {
+                            show: false
+                        },
+                        tickAmount: 6,
+                        labels: {
+                            rotate: 0,
+                            rotateAlways: true,
+                            style: {
+                                colors: labelColor,
+                                fontSize: '12px'
+                            },
+                        },
+                        crosshairs: {
+                            position: 'front',
+                            stroke: {
+                                color: baseColor,
+                                width: 1,
+                                dashArray: 3
+                            }
+                        },
+                        tooltip: {
+                            enabled: true,
+                            formatter: undefined,
+                            offsetY: 0,
+                            style: {
+                                fontSize: '12px'
+                            }
+                        }
+                    },
+                    yaxis: {
+                        max: 10,
+                        min: 0,
+                        tickAmount: 5,
+                        labels: {
+                            style: {
+                                colors: labelColor,
+                                fontSize: '12px'
+                            },
+                            formatter: function (val) {
+                                return parseInt(val)
+                            }
+                        }
+                    },
+                    states: {
+                        normal: {
+                            filter: {
+                                type: 'none',
+                                value: 0
+                            }
+                        },
+                        hover: {
+                            filter: {
+                                type: 'none',
+                                value: 0
+                            }
+                        },
+                        active: {
+                            allowMultipleDataPointsSelection: false,
+                            filter: {
+                                type: 'none',
+                                value: 0
+                            }
+                        }
+                    },
+                    tooltip: {
+                        style: {
+                            fontSize: '12px'
+                        },
+                        y: {
+                            formatter: function (val) {
+                                return parseInt(val)
+                            }
+                        }
+                    },
+                    colors: [lightColor],
+                    grid: {
+                        borderColor: borderColor,
+                        strokeDashArray: 4,
+                        yaxis: {
+                            lines: {
+                                show: true
+                            }
+                        }
+                    },
+                    markers: {
+                        strokeColor: baseColor,
+                        strokeWidth: 3
+                    }
+                };
+        
+                chart.self = new ApexCharts(element, options);
+        
+                // Set timeout to properly get the parent elements width
+                setTimeout(function() {
+                    chart.self.render();
+                    chart.rendered = true;
+                }, 200);          
+            },
+            error: function(error) {
+                console.error(error);
+            }
+        });
+
+    }
+
+    // Public methods
+    return {
+        init: function () {
+            initChart();
+
+            // Update chart on theme mode change
+            KTThemeMode.on("kt.thememode.change", function() {                
+                if (chart.rendered) {
+                    chart.self.destroy();
+                }
+
+                initChart(chart);
+            });
+        }   
+    }
+}();
+
+// Webpack support
+if (typeof module !== 'undefined') {
+    module.exports = KTChartsWidget4;
+}
+
+// On document ready
+KTUtil.onDOMContentLoaded(function() {
+    KTChartsWidget4.init();
+});
