@@ -3,7 +3,7 @@
     $currentMonthProductRollover = round($currentMonthOverallProfits * 0.2, 2);
 @endphp
 
-<div class="card card-theme h-md-50 mb-5 mb-xl-10" style="background-color: #0d6efd;background-image:url('assets/media/patterns/vector-1.png')">
+<div class="card card-theme h-md-50 mb-5 mb-xl-10" style="background-color: #0d6efd;background-image:url('/assets/media/patterns/vector-blue.png')">
   <!--begin::Content-->
   <div class="card-body d-flex flex-column align-items-center">
     <!--begin::Info-->

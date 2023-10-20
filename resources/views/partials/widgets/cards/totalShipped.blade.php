@@ -1,6 +1,6 @@
 <div class="card card-theme h-md-50 mb-5 mb-xl-10">
   <!--begin::Content-->
-  <div class="card-body d-flex flex-column align-items-center" style="background-color: #0d6efd;background-image:url('assets/media/patterns/vector-1.png')">
+  <div class="card-body d-flex flex-column align-items-center" style="background-color: #0d6efd;background-image:url('/assets/media/patterns/vector-blue.png')">
     <!--begin::Info-->
     <div class="d-flex align-items-center">
       <!--begin::Currency-->

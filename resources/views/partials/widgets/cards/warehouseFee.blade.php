@@ -2,7 +2,7 @@
     $currentMonthWareHouseFee = App\Models\Order::whereMonth('order_date', now()->month)->sum('warehouse_fee');
 @endphp
 
-<div class="card card-theme h-md-50 mb-5 mb-xl-10" style="background-color: #40E0D0;background-image:url('assets/media/patterns/vector-1.png')">
+<div class="card card-theme h-md-50 mb-5 mb-xl-10" style="background-color: #40E0D0;background-image:url('/assets/media/patterns/vector-aqua.png')">
   <!--begin::Content-->
   <div class="card-body d-flex flex-column align-items-center">
     <!--begin::Info-->

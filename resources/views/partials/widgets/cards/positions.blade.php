@@ -2,7 +2,7 @@
   // Get the second-to-last value from the array
   $positions = $profitList[0]->position;
 @endphp
-<div class="card card-theme h-md-50 mb-5 mb-xl-10" style="background-color: #d63384;background-image:url('assets/media/patterns/vector-1.png')">
+<div class="card card-theme h-md-50 mb-5 mb-xl-10" style="background-color: #d63384;background-image:url('/assets/media/patterns/vector-pink.png')">
   <!--begin::Content-->
   <div class="card-body d-flex flex-column align-items-center">
     <!--begin::Info-->
