@@ -3639,8 +3639,12 @@ var KTChartsWidget3 = function () {
 
                 // Convert order_dates to match the format in categories
                 const formatted_order_dates = order_dates.map(date => {
-                    const month = new Date(date).toLocaleString('default', { month: 'short' });
-                    const day = new Date(date).toLocaleString('default', { day: '2-digit' });
+                    const currentDate = new Date(date);
+                    currentDate.setDate(currentDate.getDate() + 1);
+                
+                    const month = currentDate.toLocaleString('default', { month: 'short' });
+                    const day = currentDate.toLocaleString('default', { day: '2-digit' });
+                
                     return `${month} ${day}`;
                 });
                 
@@ -3880,8 +3884,12 @@ var KTChartsWidget4 = function () {
 
                 // Convert order_dates to match the format in categories
                 const formatted_order_dates = order_dates.map(date => {
-                    const month = new Date(date).toLocaleString('default', { month: 'short' });
-                    const day = new Date(date).toLocaleString('default', { day: '2-digit' });
+                    const currentDate = new Date(date);
+                    currentDate.setDate(currentDate.getDate() + 1);
+                
+                    const month = currentDate.toLocaleString('default', { month: 'short' });
+                    const day = currentDate.toLocaleString('default', { day: '2-digit' });
+                
                     return `${month} ${day}`;
                 });
                 
