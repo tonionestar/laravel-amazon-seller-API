@@ -222,68 +222,6 @@ class DashboardController extends Controller
 
         $accessToken = $response->json()['access_token'];
 
-        // get ReportID and DocumentId
-        // $response = Http::withHeaders([
-        //     'x-amz-access-token' => $accessToken
-        // ])->get('https://sellingpartnerapi-na.amazon.com/reports/2021-06-30/reports', [
-        //     'MarketplaceIds' => env('MARKET_PLACE_ID'),
-        //     'reportTypes' => 'GET_V2_SETTLEMENT_REPORT_DATA_XML'
-        // ]);
-
-        // $reports = $response->json();
-        // $documentIds = Arr::pluck($reports['reports'], 'reportDocumentId');
-
-        // // get Reports Url
-        // $reports_urls = [];
-
-        // foreach ($documentIds as $item) {
-        //     $response = Http::withHeaders([
-        //         'x-amz-access-token' => $accessToken
-        //     ])->get("https://sellingpartnerapi-na.amazon.com/reports/2021-06-30/documents/{$item}");
-
-        //     $reports_url = $response->json();
-        //     $reports_urls[] = $reports_url;
-        // }
-
-        // // get Reports Data
-        // $reports_data = [];
-
-        // foreach ($reports_urls as $item) {
-        //     if (!isset($item['url'])) {
-        //         continue;
-        //     }
-
-        //     $url = $item['url'];
-        //     $response = Http::get($url);
-
-        //     $body = $response->body();
-
-        //     // If the response is XML, you can decide how to handle it.
-        //     // For instance, you might want to convert it to an array or a JSON string:
-        //     $xml = simplexml_load_string($body);
-        //     $json = json_encode($xml);
-        //     $array = json_decode($json, TRUE);
-
-        //     $reports_data[] = $array;
-
-        //     // get Shipping fee
-        //     $data = $reports_data; // assign your data to $data variable
-        //     $shippingServices = [];
-
-        //     foreach ($data as $item) {
-        //         if (isset($item['Message']['SettlementReport']['OtherTransaction'])) {
-        //             foreach ($item['Message']['SettlementReport']['OtherTransaction'] as $transaction) {
-        //                 if ($transaction['TransactionType'] == 'ShippingServices') {
-        //                     $shippingServices[] = [
-        //                         'AmazonOrderID' => $transaction['AmazonOrderID'],
-        //                         'Amount' => $transaction['Amount']
-        //                     ];
-        //                 }
-        //             }
-        //         }
-        //     }
-        // }
-
         // get OrderID
         $response = Http::withHeaders([
             'x-amz-access-token' => $accessToken
@@ -302,17 +240,6 @@ class DashboardController extends Controller
             if ($item['OrderStatus'] == 'Shipped') {
                 $order_array[] = $item;
                 $order_id = $item['AmazonOrderId'];
-
-                // $matchedShippingService = array_filter($shippingServices, function ($shippingService) use ($order_id) {
-                //     return $shippingService["AmazonOrderID"] == $order_id;
-                // });
-
-                // if (!empty($matchedShippingService)) {
-                //     $amountKey = array_key_first($matchedShippingService); // Get the first key
-                //     $shipping_fee = abs($matchedShippingService[$amountKey]['Amount']); // Use the first key to get the absolute Amount
-                // } else {
-                //     $shipping_fee = 0;
-                // }
 
                 $shipping_carrier = isset($item['AutomatedShippingSettings']['AutomatedCarrierName']) ? $item['AutomatedShippingSettings']['AutomatedCarrierName'] : '';
 
