@@ -3739,7 +3739,7 @@ var KTChartsWidget3 = function () {
                     },
                     yaxis: {
                         tickAmount: 5,
-                        max: 300,
+                        max: 5000,
                         min: 0,
                         labels: {
                             style: {
@@ -3991,7 +3991,7 @@ var KTChartsWidget4 = function () {
                         }
                     },
                     yaxis: {
-                        max: 10,
+                        max: 100,
                         min: 0,
                         tickAmount: 5,
                         labels: {

@@ -565,6 +565,17 @@ class DashboardController extends Controller
         $orders = $query->paginate(10);
         // Log::info("Logging query: " . $query);
 
+        foreach ($orders as $order) {
+            // Subtract 'cost_per_unit' from 'profit'
+            $profit = $order->item_total - $order->warehouse_fee - $order->amazon_fee - $order->shipping_fee - $order->cost_per_unit;
+
+            // Update the 'profit' field in the Order model
+            $order->profit = $profit;
+
+            // Save the updated order
+            $order->save();
+        }
+
         // Append the filter parameters to the pagination links
         $orders->appends($queryParams);
 
