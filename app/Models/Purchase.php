@@ -24,5 +24,6 @@ class Purchase extends Model
         'total_purchased_units',
         'shipping_fee',
         'cost_per_unit',
+        'image',
     ];
 }

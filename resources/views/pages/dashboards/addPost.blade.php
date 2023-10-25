@@ -82,7 +82,7 @@
                 imagePreview.src = '#';
             }
         });
-        </script>
+    </script>
 
     @if (session('success'))
         <div class="alert alert-success alert-dismissible fade show" id="success-alert" role="alert" style="position: fixed; top: 20px; right: 20px; min-width: 30%; z-index: 9999;">

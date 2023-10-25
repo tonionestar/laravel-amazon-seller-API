@@ -28,7 +28,6 @@
                     <!--begin::Title-->
                     <h3 class="card-title align-items-start flex-column">
                         <span class="card-label fw-bold text-gray-800">PURCHASES</span>
-                        <span class="text-gray-400 mt-1 fw-semibold fs-6">Updated 37 minutes ago</span>
                     </h3>
                     <!--end::Title-->
                     <!--begin::Toolbar-->
@@ -48,6 +47,7 @@
                             <thead>
                                 <tr class="fs-6 fw-bold text-gray-500 border-bottom-0">
                                     <th class="p-0 pb-3 min-w-200px text-center">DATE</th>
+                                    <th class="p-0 pb-3 min-w-200px text-center">IMAGE</th>
                                     <th class="p-0 pb-3 min-w-300px text-center">AMAZON LINK</th>
                                     <th class="p-0 pb-3 min-w-150px text-center">ASIN</th>
                                     <th class="p-0 pb-3 min-w-150px text-center">TOTAL UNITS</th>
@@ -63,6 +63,11 @@
                                         <td class="text-center pe-0">
                                             <!--begin::Label-->
                                             <span class="text-gray-600 fw-bold fs-6">{{ $purchase->date }}</span>
+                                            <!--end::Label-->
+                                        </td>
+                                        <td class="symbol symbol-50px me-3 text-center" style="display: flex; justify-content: center;">
+                                            <!--begin::Label-->
+                                                <img src="{{ $purchase->image }}" alt="" class="" style="max-width: 100%; max-height: 100%;">
                                             <!--end::Label-->
                                         </td>
                                         <td class="text-center pe-0">

@@ -356,16 +356,21 @@ class DashboardController extends Controller
             'total_purchased_units' => 'required|numeric|min:1',
             'shipping_fee' => 'required|numeric',
             'cost_per_unit' => 'required|numeric',
+            'image' => 'required|image',
         ]);
 
-        Purchase::create([
-            'date' => $request->date,
-            'amazon_link' => $request->amazon_link,
-            'asin' => $request->asin,
-            'total_purchased_units' => $request->total_purchased_units,
-            'shipping_fee' => $request->shipping_fee,
-            'cost_per_unit' => $request->cost_per_unit,
-        ]);
+        // Store the image file in the local assets folder
+        $imagePath = $request->file('image')->store('assets', 'public');
+
+        $purchase = new Purchase;
+        $purchase->date = $request->date;
+        $purchase->amazon_link = $request->amazon_link;
+        $purchase->asin = $request->asin;
+        $purchase->total_purchased_units = $request->total_purchased_units;
+        $purchase->shipping_fee = $request->shipping_fee;
+        $purchase->cost_per_unit = $request->cost_per_unit;
+        $purchase->image = Storage::url($imagePath);
+        $purchase->save();
 
         $shipping_fee = $request->shipping_fee;
         $cost_per_unit = $request->cost_per_unit;

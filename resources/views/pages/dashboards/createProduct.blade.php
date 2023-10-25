@@ -23,7 +23,7 @@
     <div>
         <!--begin::Col-->
         <div class="col-xl-6">
-            <form action="{{ route('dashboard.createProduct.post') }}" method="post">
+            <form action="{{ route('dashboard.createProduct.post') }}" method="post" enctype="multipart/form-data">
                 @csrf
                 <div class="fv-row mb-8">
                     <label class="mb-2 required form-label">Date</label>
@@ -58,6 +58,15 @@
                     <input type="number" placeholder="5.35" name="shipping_fee" step="0.01" autocomplete="off" class="form-control bg-transparent" value="" required/>
                 </div>
 
+                <div class="mb-8">
+                    <label for="image" class="mb-2 required form-label">Image</label>
+                    <input type="file" id="image" name="image" class="form-control" accept="image/*" required />
+                </div>
+
+                <div class="mb-8">
+                    <img id="image-preview" src="#" alt="Image Preview" style="display: none; max-width: 300px; max-height: 300px;" />
+                </div>
+
                 <!--begin::Submit button-->
                 <div class="d-grid mb-10">
                     <button type="submit" id="kt_sign_in_submit" class="btn btn-primary">
@@ -74,16 +83,34 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
     <script>
-            $(document).ready(function() {
-                $(".alert.alert-danger").delay(5000).slideUp(200, function() {
-                    $(this).alert('close');
-                });
-
-                $(".alert.alert-success").delay(5000).slideUp(200, function() {
-                    $(this).remove(); 
-                });
+        $(document).ready(function() {
+            $(".alert.alert-danger").delay(5000).slideUp(200, function() {
+                $(this).alert('close');
             });
-        </script>
+
+            $(".alert.alert-success").delay(5000).slideUp(200, function() {
+                $(this).remove(); 
+            });
+        });
+
+        const imageInput = document.getElementById('image');
+        const imagePreview = document.getElementById('image-preview');
+
+        imageInput.addEventListener('change', function () {
+            const file = this.files[0];
+            if (file) {
+                imagePreview.style.display = 'block';
+                const reader = new FileReader();
+                reader.addEventListener('load', function () {
+                    imagePreview.src = this.result;
+                });
+                reader.readAsDataURL(file);
+            } else {
+                imagePreview.style.display = 'none';
+                imagePreview.src = '#';
+            }
+        });
+    </script>
 
     @if (session('success'))
         <div class="alert alert-success alert-dismissible fade show" id="success-alert" role="alert" style="position: fixed; top: 20px; right: 20px; min-width: 30%; z-index: 9999;">
