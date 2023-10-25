@@ -26,14 +26,14 @@ use Carbon\Carbon;
 
         if (Carbon::parse($orderDate)->isSameWeek($currentDate)) {
             $chart_w[] = [
-                'order_date' => $orderDate . ' ' . $orderTime,
+                'order_date' => $orderDate,
                 'item_total' => $itemTotal
             ];
         }
 
         if (Carbon::parse($orderDate)->format('Y-m') === date('Y-m')) {
             $chart_m[] = [
-                'order_date' => $orderDate . ' ' . $orderTime,
+                'order_date' => $orderDate,
                 'item_total' => $itemTotal
             ];
         }

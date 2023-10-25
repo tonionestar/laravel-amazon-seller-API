@@ -7317,67 +7317,67 @@ var KTChartsWidget35 = function () {
             // Get the current date and time
             var currentDateTime = new Date();
 
-// Initialize the array for chart labels
-var chart1Labels = [];
+            // Initialize the array for chart labels
+            var chart1Labels = [];
 
-// Calculate time 24 hours ago
-var startTime = new Date(currentDateTime.getTime() - 24 * 60 * 60 * 1000);
+            // Calculate time 24 hours ago
+            var startTime = new Date(currentDateTime.getTime() - 24 * 60 * 60 * 1000);
 
-// Generate chart labels for 12 hours
-for (var i = 0; i < 12; i++) {
-    var labelTime = new Date(startTime.getTime() + i * 2 * 60 * 60 * 1000);
+            // Generate chart labels for 12 hours
+            for (var i = 0; i < 12; i++) {
+                var labelTime = new Date(startTime.getTime() + i * 2 * 60 * 60 * 1000);
 
-    // Get the hour in the 12-hour format
-    var hour = labelTime.getHours();
-    var ampm = hour >= 12 ? 'PM' : 'AM';
-    hour = (hour + 11) % 12 + 1;
+                // Get the hour in the 12-hour format
+                var hour = labelTime.getHours();
+                var ampm = hour >= 12 ? 'PM' : 'AM';
+                hour = (hour + 11) % 12 + 1;
 
-    // Format the hour as per your desired time format
-    var label = hour + ampm;
-    chart1Labels.push(label);
-}
+                // Format the hour as per your desired time format
+                var label = hour + ampm;
+                chart1Labels.push(label);
+            }
 
-var chart1Data = Array(12).fill(0);
+            var chart1Data = Array(12).fill(0);
 
-// Calculate the time range from yesterday at 5 PM to today at 5 PM
-var startDate = new Date(currentDateTime.getFullYear(), currentDateTime.getMonth(), currentDateTime.getDate() - 1, 17, 0, 0);
-var endDate = new Date(currentDateTime.getFullYear(), currentDateTime.getMonth(), currentDateTime.getDate(), 17, 0, 0);
+            // Calculate the time range from yesterday at 5 PM to today at 5 PM
+            var startDate = new Date(currentDateTime.getFullYear(), currentDateTime.getMonth(), currentDateTime.getDate() - 1, 17, 0, 0);
+            var endDate = new Date(currentDateTime.getFullYear(), currentDateTime.getMonth(), currentDateTime.getDate(), 17, 0, 0);
 
-for (var i = 0; i < chart_d.length; i++) {
-    var order = chart_d[i];
-    var orderDate = new Date(order["order_date"]);
+            for (var i = 0; i < chart_d.length; i++) {
+                var order = chart_d[i];
+                var orderDate = new Date(order["order_date"]);
 
-    if (orderDate >= startDate && orderDate <= endDate) {
-        // Calculate the index for the current data point using the hour difference
-        var hourDifference = Math.floor((orderDate - startDate) / (60 * 60 * 1000));
+                if (orderDate >= startDate && orderDate <= endDate) {
+                    // Calculate the index for the current data point using the hour difference
+                    var hourDifference = Math.floor((orderDate - startDate) / (60 * 60 * 1000));
 
-        // Increment the data point at the calculated index
-        chart1Data[hourDifference] += order["item_total"];
-    }
-}
+                    // Increment the data point at the calculated index
+                    chart1Data[hourDifference] += order["item_total"];
+                }
+            }
 
-biggestData[0] = Math.max(...chart1Data);
-lowestData[0] = Math.min(...chart1Data);
-biggestIndex[0] = chart1Data.indexOf(biggestData[0]);
-lowestIndex[0] = chart1Data.indexOf(lowestData[0]);
-biggestLabel[0] = biggestData[0] !== 0 ? getTimeRange(startDate, biggestIndex[0]) : chart1Labels[0];
-lowestLabel[0] = lowestData[0] !== 0 ? getTimeRange(startDate, lowestIndex[0]) : chart1Labels[chart1Labels.length - 1];
+            biggestData[0] = Math.max(...chart1Data);
+            lowestData[0] = Math.min(...chart1Data);
+            biggestIndex[0] = chart1Data.indexOf(biggestData[0]);
+            lowestIndex[0] = chart1Data.indexOf(lowestData[0]);
+            biggestLabel[0] = biggestData[0] !== 0 ? getTimeRange(startDate, biggestIndex[0]) : chart1Labels[0];
+            lowestLabel[0] = lowestData[0] !== 0 ? getTimeRange(startDate, lowestIndex[0]) : chart1Labels[chart1Labels.length - 1];
 
-function getTimeRange(startDate, index) {
-    var rangeStart = new Date(startDate);
-    rangeStart.setHours(rangeStart.getHours() + index);
+            function getTimeRange(startDate, index) {
+                var rangeStart = new Date(startDate);
+                rangeStart.setHours(rangeStart.getHours() + index);
 
-    var rangeEnd = new Date(rangeStart);
-    rangeEnd.setHours(rangeEnd.getHours() + 1); // Assuming the data points represent hourly intervals
+                var rangeEnd = new Date(rangeStart);
+                rangeEnd.setHours(rangeEnd.getHours() + 1); // Assuming the data points represent hourly intervals
 
-    // Format the time range as desired
-    var options = { hour: 'numeric', minute: 'numeric' };
+                // Format the time range as desired
+                var options = { hour: 'numeric', minute: 'numeric' };
 
-    var startStr = rangeStart.toLocaleString('en-US', options);
-    var endStr = rangeEnd.toLocaleString('en-US', options);
+                var startStr = rangeStart.toLocaleString('en-US', options);
+                var endStr = rangeEnd.toLocaleString('en-US', options);
 
-    return startStr + " - " + endStr;
-}
+                return startStr + " - " + endStr;
+            }
 
             box_biggestLabel1.innerHTML = biggestLabel[0];
             box_biggestData1.innerHTML = "$" + biggestData[0];
@@ -7387,30 +7387,31 @@ function getTimeRange(startDate, index) {
             initChart(chart1, '#kt_charts_widget_35_tab_1', '#kt_charts_widget_35_chart_1', chart1Data, chart1Labels, true);
 
             var currentDateTime = new Date();
-
-            // Initialize the array for chart labels
             var chart2Labels = [];
-
-            // Generate chart labels from 1 week ago to today
-            for (var i = 7; i >= 0; i--) {
-                var day = currentDateTime.getDate() - i;
-
-                // Format the day
-                var label = day.toString();
-                chart2Labels.push(label);
-            }
-
             var chart2Data = [];
 
-            // Generate chart data for the past 1 month
-            for (var i = 7; i >= 0; i--) {
+            // Generate chart labels from 1 week ago to today
+            for (var i = 6; i >= 0; i--) {
                 var currentDate = new Date();
                 currentDate.setDate(currentDateTime.getDate() - i);
-                currentDate.setHours(0, 0, 0, 0);
+                chart2Labels.push(formatDate(currentDate));
+            }
 
-                var matchingOrder = findMatchingOrder(currentDate, chart_w);
-                var data = matchingOrder ? matchingOrder["item_total"] : 0;
-                chart2Data.push(data);
+            // Store cumulative totals for each date
+            var dateTotals = {};
+
+            // Calculate cumulative item totals for each date
+            for (var i = 0; i < chart2Labels.length; i++) {
+                var currentDate = parseDate(chart2Labels[i]);
+                var matchingOrders = findMatchingOrders(currentDate, chart_m);
+                var total = sumItemTotals(matchingOrders);
+                dateTotals[chart2Labels[i]] = total;
+            }
+
+            // Populate chart2Data array based on date totals
+            for (var i = 0; i < chart2Labels.length; i++) {
+                var total = dateTotals[chart2Labels[i]] || 0;
+                chart2Data.push(total);
             }
 
             biggestData[1] = Math.max(...chart2Data);
@@ -7419,19 +7420,6 @@ function getTimeRange(startDate, index) {
             lowestIndex[1] = chart2Data.indexOf(lowestData[1]);
             biggestLabel[1] = biggestData[1] !== 0 ? chart2Labels[biggestIndex[1]] : currentDateTime.getDate().toString();
             lowestLabel[1] = lowestData[1] !== 0 ? chart2Labels[lowestIndex[1]] : currentDateTime.getDate().toString();
-
-            function findMatchingOrder(date, orders) {
-                var matchingOrder = orders.find(function (order) {
-                    var orderDate = new Date(order["order_date"]);
-                    return (
-                        orderDate.getFullYear() === date.getFullYear() &&
-                        orderDate.getMonth() === date.getMonth() &&
-                        orderDate.getDate() === date.getDate()
-                    );
-                });
-
-                return matchingOrder;
-            }
 
             box_biggestLabel2.innerHTML = biggestLabel[1];
             box_biggestData2.innerHTML = "$" + biggestData[1];
@@ -7447,54 +7435,57 @@ function getTimeRange(startDate, index) {
             var chart3Data = [];
 
             // Generate chart labels for the past 1 month
-            for (var i = 0; i < 32; i++) {
+            for (var i = 29; i >= 0; i--) {
                 var currentDate = new Date();
                 currentDate.setDate(currentDateTime.getDate() - i);
-                chart3Labels.unshift(formatDate(currentDate));
-
-                // Break the loop once we reach 1 month ago
-                if (currentDate.getMonth() < currentDateTime.getMonth() - 1)
-                    break;
+                chart3Labels.push(formatDate(currentDate));
             }
 
-            // Generate chart data for the past 1 month and exclude lowest data value of 0
-            lowestData[2] = Infinity; // Initialize with Infinity as the starting value
-            lowestLabel[2] = chart3Labels[0];
+            // Store cumulative totals for each date
+            var dateTotals = {};
+
+            // Calculate cumulative item totals for each date
             for (var i = 0; i < chart3Labels.length; i++) {
                 var currentDate = parseDate(chart3Labels[i]);
-
-                var matchingOrder = findMatchingOrder(currentDate, chart_m);
-                var data = matchingOrder ? matchingOrder["item_total"] : 0;
-                if (data !== 0 && data < lowestData[2]) {
-                    lowestData[2] = data;
-                    lowestLabel[2] = chart3Labels[i];
-                }
-                chart3Data.unshift(data);
+                var matchingOrders = findMatchingOrders(currentDate, chart_m);
+                var total = sumItemTotals(matchingOrders);
+                dateTotals[chart3Labels[i]] = total;
             }
 
-            biggestData[2] = chart3Data[0];
-            biggestLabel[2] = chart3Labels[0];
-
-            for (var j = 0; j < chart3Data.length; j++) {
-                if (chart3Data[j] > biggestData[2]) {
-                    biggestData[2] = chart3Data[j];
-                    biggestLabel[2] = chart3Labels[j];
-                }
+            // Populate chart3Data array based on date totals
+            for (var i = 0; i < chart3Labels.length; i++) {
+                var total = dateTotals[chart3Labels[i]] || 0;
+                chart3Data.push(total);
             }
 
-            function findMatchingOrder(date, orders) {
-                var matchingOrder = orders.find(function (order) {
+            biggestData[2] = Math.max(...chart3Data);
+            lowestData[2] = Math.min(...chart3Data);
+            biggestIndex[2] = chart3Data.indexOf(biggestData[2]);
+            lowestIndex[2] = chart3Data.indexOf(lowestData[2]);
+            biggestLabel[2] = chart3Labels[biggestIndex[2]];
+            lowestLabel[2] = chart3Labels[lowestIndex[2]];
+
+            function findMatchingOrders(date, orders) {
+                var matchingOrders = orders.filter(function (order) {
                     var orderDate = new Date(order["order_date"]);
-                    // Use setHours(0, 0, 0, 0) to compare dates without considering the time
+                    orderDate.setHours(0, 0, 0, 0);
+                    // Compare dates without considering the time
                     return (
                         orderDate.getFullYear() === date.getFullYear() &&
                         orderDate.getMonth() === date.getMonth() &&
-                        orderDate.getDate() === date.getDate() &&
-                        orderDate.setHours(0, 0, 0, 0) <= date.setHours(0, 0, 0, 0)
+                        orderDate.getDate() === date.getDate()
                     );
                 });
 
-                return matchingOrder;
+                return matchingOrders;
+            }
+
+            function sumItemTotals(orders) {
+                var total = 0;
+                for (var i = 0; i < orders.length; i++) {
+                    total += orders[i]["item_total"];
+                }
+                return total;
             }
 
             function formatDate(date) {
@@ -7508,7 +7499,7 @@ function getTimeRange(startDate, index) {
                 var month = parseInt(parts[0], 10);
                 var day = parseInt(parts[1], 10);
                 var year = currentDateTime.getFullYear();
-                return new Date(year, month - 1, day);
+                return new Date(year, month - 1, day - 1);
             }
 
             box_biggestLabel3.innerHTML = biggestLabel[2];
