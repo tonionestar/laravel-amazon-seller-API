@@ -4,6 +4,11 @@ let chart_w = JSON.parse(document.getElementById("chart_w").getAttribute("data-v
 let chart_m = JSON.parse(document.getElementById("chart_m").getAttribute("data-value"));
 let chart_y = JSON.parse(document.getElementById("chart_y").getAttribute("data-value"));
 
+let chart_d_a = JSON.parse(document.getElementById("chart_d_a").getAttribute("data-value"));
+let chart_w_a = JSON.parse(document.getElementById("chart_w_a").getAttribute("data-value"));
+let chart_m_a = JSON.parse(document.getElementById("chart_m_a").getAttribute("data-value"));
+let chart_y_a = JSON.parse(document.getElementById("chart_y_a").getAttribute("data-value"));
+
 let biggestData = [];
 let biggestLabel = [];
 let lowestData = [];
@@ -7414,6 +7419,10 @@ var KTChartsWidget35 = function () {
                 chart2Data.push(total);
             }
 
+            chart2Data = chart2Data.map(function (value) {
+                return parseFloat(value.toFixed(2));
+            });
+
             biggestData[1] = Math.max(...chart2Data);
             lowestData[1] = Math.min(...chart2Data);
             biggestIndex[1] = chart2Data.indexOf(biggestData[1]);
@@ -7457,6 +7466,10 @@ var KTChartsWidget35 = function () {
                 var total = dateTotals[chart3Labels[i]] || 0;
                 chart3Data.push(total);
             }
+
+            chart3Data = chart3Data.map(function (value) {
+                return parseFloat(value.toFixed(2));
+            });
 
             biggestData[2] = Math.max(...chart3Data);
             lowestData[2] = Math.min(...chart3Data);

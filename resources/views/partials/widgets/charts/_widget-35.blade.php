@@ -284,12 +284,12 @@ let decrease1 = document.getElementById("de1");
 increase1.innerHTML = 0 - valueElem.textContent;
 decrease1.innerHTML = 0  - valueElem.textContent;
 
-// Check if chart_d is defined and has data
-if (typeof chart_d !== "undefined" && chart_d.length > 0) {
-  value = calculateAverage(chart_d);
+// Check if chart_d_a is defined and has data
+if (typeof chart_d_a !== "undefined" && chart_d_a.length > 0) {
+  value = calculateAverage(chart_d_a);
   console.log(value);
 } else {
-  console.log("chart_d is empty or undefined");
+  console.log("chart_d_a is empty or undefined");
 }
 
 valueElem.textContent = value.toLocaleString();
@@ -298,13 +298,13 @@ function updateValue(type) {
     // Use the 'type' parameter to determine the updated value
     var value = 0;
     if (type === 0) {
-        value = calculateAverage(chart_d).average;
+        value = calculateAverage(chart_d_a).average;
     } else if (type === 1) {
-        value = calculateAverage(chart_w).average;
+        value = calculateAverage(chart_w_a).average;
     } else if (type === 2) {
-        value = calculateAverage(chart_m).average;
+        value = calculateAverage(chart_m_a).average;
     } else if (type === 3) {
-        value = calculateAverage(chart_y).average;
+        value = calculateAverage(chart_y_a).average;
     }
 
     // Format the value to have a comma as the thousands separator
@@ -315,13 +315,13 @@ function updateValue(type) {
 
 	let increase1 = document.getElementById("in1");
 	let decrease1 = document.getElementById("de1");
-	increase1.innerHTML = biggestData[type] - valueElem.textContent;
-	decrease1.innerHTML = lowestData[type] - valueElem.textContent;
+	increase1.innerHTML = (biggestData[type] - valueElem.textContent).toFixed(2);
+	decrease1.innerHTML = (lowestData[type] - valueElem.textContent).toFixed(2);
 
 	let increase2 = document.getElementById("in2");
 	let decrease2 = document.getElementById("de2");
-	increase2.innerHTML = biggestData[type] - valueElem.textContent;
-	decrease2.innerHTML = lowestData[type] - valueElem.textContent;
+	increase2.innerHTML = (biggestData[type] - valueElem.textContent).toFixed(2);
+	decrease2.innerHTML = (lowestData[type] - valueElem.textContent).toFixed(2);
 
 	let increase3 = document.getElementById("in3");
 	let decrease3 = document.getElementById("de3");
@@ -368,7 +368,7 @@ function calculateAverage(data) {
     }
 
     return {
-        average: sum / data.length,
+        average: (sum / data.length).toFixed(2),
         highest: highest,
         lowest: lowest,
         highestDate: highestDate,

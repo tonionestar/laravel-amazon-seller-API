@@ -210,7 +210,7 @@ class DashboardController extends Controller
     public function orders()
     {
         $orders = new Order;
-        ini_set('max_execution_time', 500);
+        ini_set('max_execution_time', 5000);
 
         // get accessToken
         $response = Http::post('https://api.amazon.com/auth/o2/token', [
@@ -232,6 +232,7 @@ class DashboardController extends Controller
 
         $payload = $response->json();
         $orders_data = $payload['payload']['Orders'];
+        dd($orders_data);
 
         $order_array = [];
         $order_items_array = [];

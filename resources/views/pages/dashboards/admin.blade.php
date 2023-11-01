@@ -1,50 +1,77 @@
 @php
 use Carbon\Carbon;
-    $chart = App\Models\Order::all();
+$chart = App\Models\Order::all();
 
-    // Get the current date as per your timezone
-    $currentDate = date('Y-m-d');
+// Get the current date as per your timezone
+$currentDate = date('Y-m-d');
 
-    // Initialize the variables
-    $chart_d = [];
-    $chart_w = [];
-    $chart_m = [];
-    $chart_y = [];
+// Initialize the variables
+$chart_d = [];
+$chart_w = [];
+$chart_m = [];
+$chart_y = [];
 
-    // Loop through each order and store data in respective variables
-    foreach ($chart as $order) {
-        $orderDate = $order->order_date;
-        $orderTime = $order->order_time;
-        $itemTotal = $order->item_total;
+$chart_d_a = [];
+$chart_w_a = [];
+$chart_m_a = [];
+$chart_y_a = [];
 
-        if ($orderDate === $currentDate) {
-            $chart_d[] = [
-                'order_date' => $orderDate . ' ' . $orderTime,
-                'item_total' => $itemTotal
-            ];
-        }
+$today = Carbon::today();
+$oneMonthFromToday = Carbon::today()->subMonth(1);
 
-        if (Carbon::parse($orderDate)->isSameWeek($currentDate)) {
-            $chart_w[] = [
-                'order_date' => $orderDate,
-                'item_total' => $itemTotal
-            ];
-        }
+// Loop through each order and store data in respective variables
+foreach ($chart as $order) {
+    $orderDate = $order->order_date;
+    $orderTime = $order->order_time;
+    $itemTotal = $order->item_total;
 
-        if (Carbon::parse($orderDate)->format('Y-m') === date('Y-m')) {
-            $chart_m[] = [
-                'order_date' => $orderDate,
-                'item_total' => $itemTotal
-            ];
-        }
+    // Add data to all arrays
+    $chart_d[] = [
+        'order_date' => $orderDate . ' ' . $orderTime,
+        'item_total' => $itemTotal
+    ];
+    $chart_w[] = [
+        'order_date' => $orderDate,
+        'item_total' => $itemTotal
+    ];
+    $chart_m[] = [
+        'order_date' => $orderDate,
+        'item_total' => $itemTotal
+    ];
+    $chart_y[] = [
+        'order_date' => $orderDate,
+        'item_total' => $itemTotal
+    ];
 
-        if (Carbon::parse($orderDate)->format('Y') === date('Y')) {
-            $chart_y[] = [
-                'order_date' => $orderDate,
-                'item_total' => $itemTotal
-            ];
-        }
+    // Add data to current arrays if the date matches
+    if ($orderDate === $currentDate) {
+        $chart_d_a[] = [
+            'order_date' => $orderDate . ' ' . $orderTime,
+            'item_total' => $itemTotal
+        ];
     }
+
+    if (Carbon::parse($orderDate)->isSameWeek($currentDate)) {
+        $chart_w_a[] = [
+            'order_date' => $orderDate,
+            'item_total' => $itemTotal
+        ];
+    }
+
+    if (Carbon::parse($orderDate)->isBetween($oneMonthFromToday, Carbon::today())) {
+    $chart_m_a[] = [
+        'order_date' => $orderDate,
+        'item_total' => $itemTotal
+    ];
+}
+
+    if (Carbon::parse($orderDate)->format('Y') === date('Y')) {
+        $chart_y_a[] = [
+            'order_date' => $orderDate,
+            'item_total' => $itemTotal
+        ];
+    }
+}
 @endphp
 
 <x-default-layout>
@@ -63,6 +90,11 @@ use Carbon\Carbon;
     <span id="chart_w" data-value='<?php echo json_encode($chart_w); ?>'></span>
     <span id="chart_m" data-value='<?php echo json_encode($chart_m); ?>'></span>
     <span id="chart_y" data-value='<?php echo json_encode($chart_y); ?>'></span>
+
+    <span id="chart_d_a" data-value='<?php echo json_encode($chart_d_a); ?>'></span>
+    <span id="chart_w_a" data-value='<?php echo json_encode($chart_w_a); ?>'></span>
+    <span id="chart_m_a" data-value='<?php echo json_encode($chart_m_a); ?>'></span>
+    <span id="chart_y_a" data-value='<?php echo json_encode($chart_y_a); ?>'></span>
 
     <div class="row g-5 g-xl-10 mb-5 mb-xl-10">
         <!--begin::Col-->
