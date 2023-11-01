@@ -224,15 +224,15 @@ class DashboardController extends Controller
 
         // get OrderID
         $response = Http::withHeaders([
-            'x-amz-access-token' => $accessToken
+            'x-amz-access-token' => $accessToken,
         ])->get('https://sellingpartnerapi-na.amazon.com/orders/v0/orders', [
             'MarketplaceIds' => env('MARKET_PLACE_ID'),
             'CreatedAfter' => '2023-07-01'
         ]);
 
         $payload = $response->json();
+        dd($payload);
         $orders_data = $payload['payload']['Orders'];
-        dd($orders_data);
 
         $order_array = [];
         $order_items_array = [];

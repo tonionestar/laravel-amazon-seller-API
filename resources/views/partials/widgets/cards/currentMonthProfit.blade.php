@@ -1,6 +1,19 @@
 @php
-  // Get the second-to-last value from the array
+  $today = date('Y-m-d');
+  $year = substr($today, 0, 4);
+  $month = substr($today, 5, 2);
+  $day = substr($today, 8, 2);
+  $current_Month = $year . '-' . $month;
+
+  // Check if the profitList array is not empty
+
   $currentMonth = $profitList[count($profitList) - 1]->per_user_profit;
+
+  // If the current month is not equal to the last month in the profitList array, set it to 0
+  if ($current_Month !== $profitList[count($profitList) - 1]->month) {
+      $currentMonth = 0;
+  }
+
 @endphp
 <div class="card card-theme h-md-50 mb-5 mb-xl-10" style="background-color: #50CD89; background-image: url('/assets/media/patterns/vector-green.png')">
   <!--begin::Content-->

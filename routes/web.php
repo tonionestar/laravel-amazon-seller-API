@@ -30,7 +30,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/dashboard/admin', [DashboardController::class, 'admin'])->name('dashboard.admin');
     Route::get('/dashboard/client/{id}', [DashboardController::class, 'client'])->name('dashboard.client');
     Route::get('/dashboard/client', [DashboardController::class, 'client'])->name('dashboard.client');
-    Route::get('/dashboard/orders', [DashboardController::class, 'getOrderData'])->name('dashboard.orders');
+    Route::get('/dashboard/orders', [DashboardController::class, 'orders'])->name('dashboard.orders');
     Route::post('/dashboard/orders', [DashboardController::class, 'getOrderData'])->name('dashboard.orders');
     Route::get('/dashboard/purchases', [DashboardController::class, 'purchases'])->name('dashboard.purchases');
     Route::get('/dashboard/userProfits', [DashboardController::class, 'userProfits'])->name('dashboard.userProfits');
