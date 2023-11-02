@@ -223,16 +223,33 @@ class DashboardController extends Controller
         $accessToken = $response->json()['access_token'];
 
         // get OrderID
+        function encodeURIComponent($str)
+        {
+            $revert = array('%21' => '!', '%2A' => '*', '%27' => "'", '%28' => '(', '%29' => ')');
+            return strtr(rawurlencode($str), $revert);
+        }
+
         $response = Http::withHeaders([
             'x-amz-access-token' => $accessToken,
         ])->get('https://sellingpartnerapi-na.amazon.com/orders/v0/orders', [
             'MarketplaceIds' => env('MARKET_PLACE_ID'),
-            'CreatedAfter' => '2023-07-01'
+            'CreatedAfter' => '2023-08-01'
         ]);
 
         $payload = $response->json();
-        dd($payload);
         $orders_data = $payload['payload']['Orders'];
+
+        while (isset($payload['payload']['NextToken'])) {
+            $response = Http::withHeaders([
+                'x-amz-access-token' => $accessToken
+            ])->get('https://sellingpartnerapi-na.amazon.com/orders/v0/orders?MarketplaceIds=' . env('MARKET_PLACE_ID') . '&NextToken=' . encodeURIComponent($payload['payload']['NextToken']));
+
+            // Decode the API response
+            $payload = $response->json();
+
+            // Merge the new orders data into the existing orders data
+            $orders_data = array_merge($orders_data, $payload['payload']['Orders']);
+        }
 
         $order_array = [];
         $order_items_array = [];
