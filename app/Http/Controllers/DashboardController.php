@@ -315,9 +315,14 @@ class DashboardController extends Controller
                         $referralFeeAmount = 0;
                     }
 
-                    $profit = $item_total - $referralFeeAmount;
-
                     $orders = new Order;
+                    $shipping_fee = Purchase::where('asin', $order_item['ASIN'])->value('shipping_fee');
+                    $cost_per_unit = Purchase::where('asin', $order_item['ASIN'])->value('cost_per_unit');
+                    $shipping_fee_value = $shipping_fee ?? 0;
+                    $cost_per_unit_value = $cost_per_unit ?? 0;
+
+                    $profit = $item_total - $referralFeeAmount - $shipping_fee_value - $cost_per_unit_value - $order_item['QuantityOrdered'];
+
                     $orders->updateOrCreate(
                         ['order_id' => $item['AmazonOrderId'], 'sku' => $order_item['SellerSKU']],
                         [
@@ -333,6 +338,8 @@ class DashboardController extends Controller
                             'item_price' => $item_price,
                             'item_total' => $item_total,
                             'amazon_fee' => $referralFeeAmount,
+                            'shipping_fee' => $shipping_fee_value,
+                            'cost_per_unit' => $cost_per_unit_value * $order_item['QuantityOrdered'],
                             'warehouse_fee' => $order_item['QuantityOrdered'],
                             'profit' => $profit,
                         ]
