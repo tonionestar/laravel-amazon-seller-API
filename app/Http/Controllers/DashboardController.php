@@ -257,8 +257,8 @@ class DashboardController extends Controller
         foreach ($orders_data as $item) {
             if ($item['OrderStatus'] == 'Shipped') {
                 $order_array[] = $item;
-                $order_id = $item['AmazonOrderId'];
 
+                $order_id = $item['AmazonOrderId'];
                 $shipping_carrier = isset($item['AutomatedShippingSettings']['AutomatedCarrierName']) ? $item['AutomatedShippingSettings']['AutomatedCarrierName'] : '';
 
                 // get data from OrderId
@@ -270,14 +270,13 @@ class DashboardController extends Controller
                 $order_items = $payload['payload']['OrderItems'];
                 $order_items_array[] = $order_items;
 
-                $item_total = $order_items[0]['ItemPrice']['Amount'];
-                $item_price = $order_items[0]['ItemPrice']['Amount'] / $order_items[0]['QuantityOrdered'];
-
                 // Getting error
                 error_reporting(E_ALL);
                 ini_set('display_errors', TRUE);
 
                 foreach ($order_items as $order_item) {
+                    $item_total = $order_item['ItemPrice']['Amount'];
+                    $item_price = $order_item['ItemPrice']['Amount'] / $order_item['QuantityOrdered'];
                     // Prepare the request to get fees estimate
                     $feesEstimateRequest = [
                         'FeesEstimateRequest' => [
@@ -286,7 +285,7 @@ class DashboardController extends Controller
                             'PriceToEstimateFees' => [
                                 'ListingPrice' => [
                                     'CurrencyCode' => 'USD',
-                                    'Amount' => $order_items[0]['ItemPrice']['Amount']
+                                    'Amount' => $order_item['ItemPrice']['Amount']
                                 ]
                             ],
                             'Identifier' => '84058814556641'
@@ -297,7 +296,7 @@ class DashboardController extends Controller
                     $response = Http::withHeaders([
                         'x-amz-access-token' => $accessToken,
                         'Content-Type' => 'application/json'
-                    ])->post("https://sellingpartnerapi-na.amazon.com/products/fees/v0/listings/{$order_items[0]['SellerSKU']}/feesEstimate", $feesEstimateRequest);
+                    ])->post("https://sellingpartnerapi-na.amazon.com/products/fees/v0/listings/{$order_item['SellerSKU']}/feesEstimate", $feesEstimateRequest);
 
                     // Access the required fee information from the feesEstimate response variable
                     $feesEstimateResult = $response->json()['payload']['FeesEstimateResult'];
@@ -318,12 +317,9 @@ class DashboardController extends Controller
 
                     $profit = $item_total - $referralFeeAmount;
 
-                    // // Cost Per Unit from Purchase
-                    // $cost_per_unit = $this->getCostPerUnit($order_item['ASIN']);
-
                     $orders = new Order;
                     $orders->updateOrCreate(
-                        ['order_id' => $item['AmazonOrderId']],
+                        ['order_id' => $item['AmazonOrderId'], 'sku' => $order_item['SellerSKU']],
                         [
                             'order_status' => $item['OrderStatus'],
                             'order_date' => date("Y-m-d", strtotime($item['PurchaseDate'])),
@@ -337,17 +333,14 @@ class DashboardController extends Controller
                             'item_price' => $item_price,
                             'item_total' => $item_total,
                             'amazon_fee' => $referralFeeAmount,
-                            // 'shipping_fee' => $shipping_fee,
                             'warehouse_fee' => $order_item['QuantityOrdered'],
                             'profit' => $profit,
-                            // 'cost_per_unit' => $cost_per_unit
                         ]
                     );
                     sleep(2);
                 }
             }
         }
-        // $this->info('Data fetched and stored successfully.');
     }
 
     public function purchases()
