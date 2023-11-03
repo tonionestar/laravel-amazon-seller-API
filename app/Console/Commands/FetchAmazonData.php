@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Http;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use App\Models\Order;
+use App\Models\Purchase;
 use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 
 class FetchAmazonData extends Command
