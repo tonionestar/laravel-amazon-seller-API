@@ -7244,7 +7244,7 @@ var KTChartsWidget35 = function () {
             },
             yaxis: {
                 tickAmount: 8,
-                max: 2000,
+                max: 3000,
                 min: 0,
                 labels: {
                     show: false                    
