@@ -563,10 +563,8 @@ class DashboardController extends Controller
             $startDate = $date_range[0];
             $endDate = $date_range[1];
 
-            $dateString = $startDate;
-            $startDate = date('Y-m-d', strtotime(str_replace(' / ', '-', $dateString)));
-            $dateString = $endDate;
-            $endDate =  date('Y-m-d', strtotime(str_replace(' / ', '-', $dateString)));
+            $startDate = date('Y-m-d', strtotime(str_replace('/', '-', $startDate)));
+            $endDate =  date('Y-m-d', strtotime(str_replace('/', '-', $endDate)));
 
             // Add the date range condition to the query
             $query->whereBetween('order_date', [$startDate, $endDate]);
@@ -578,27 +576,16 @@ class DashboardController extends Controller
         if (
             $sort === 'order_date'
         ) {
-            $query->orderBy('order_date', $direction);
+            $query->orderBy('order_date', $direction)
+                ->orderBy('order_time', $direction);
         } else {
             // If no specific sorting is requested, sort by order_date in descending order by default
-            $query->orderBy('order_date', 'desc');
+            $query->orderBy('order_date', 'desc')
+                ->orderBy('order_time', 'desc');
         }
 
         // Fetch orders based on the filtered query
         $orders = $query->paginate(10);
-        // Log::info("Logging query: " . $query);
-
-        foreach ($orders as $order) {
-            // Subtract 'cost_per_unit' from 'profit'
-            $profit = $order->item_total - $order->warehouse_fee - $order->amazon_fee - $order->shipping_fee - $order->cost_per_unit;
-
-            // Update the 'profit' field in the Order model
-            $order->profit = $profit;
-
-            // Save the updated order
-            $order->save();
-        }
-
         // Append the filter parameters to the pagination links
         $orders->appends($queryParams);
 
